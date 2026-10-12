@@ -315,6 +315,36 @@
   .arc-node .t{ font-size:12.5px; font-weight:600; color:var(--paper); margin-top:3px; line-height:1.3; }
   .arc-node .instr{ display:flex; gap:4px; margin-top:7px; flex-wrap:wrap; }
   .arc-node .src{ font-size:9.5px; color:var(--muted); margin-top:6px; font-style:italic; }
+
+  .st-chip{ font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:0.04em; padding:2px 7px; border-radius:8px; border:1px solid var(--hair); color:var(--muted); display:inline-block; }
+  .st-chip.drafted{ color:#8a6a00; border-color:var(--gold); background:rgba(212,160,23,0.10); }
+  .st-chip.outline{ border-style:dashed; }
+  .tg{ font-size:11.5px; font-style:italic; color:var(--paper-dim); margin-top:2px; line-height:1.35; }
+  .wk-lab.alt{ opacity:.6; border-style:dotted; background:none; }
+  .wk-lab.clk{ cursor:pointer; }
+  .tbar{ display:flex; height:16px; border-radius:3px; overflow:hidden; border:1px solid var(--hair); margin-top:8px; }
+  .tbar.mini{ height:8px; }
+  .tseg{ background:var(--lab); opacity:.55; border-right:1px solid #fff; box-sizing:border-box; }
+  .tseg:nth-child(even){ opacity:.35; }
+  .tseg.hasp{ box-shadow:inset 0 -3px 0 var(--gold); }
+  .tbar.mini .tseg.hasp{ box-shadow:inset 0 -2px 0 var(--gold); }
+  .plist{ margin-top:8px; }
+  .prow{ display:flex; gap:8px; align-items:baseline; font-size:12px; color:var(--paper-dim); padding:3px 0; border-bottom:1px dashed var(--hair); }
+  .prow .m{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted); flex:none; width:44px; }
+  .pchip{ font-family:'IBM Plex Mono',monospace; font-size:9px; padding:1px 6px; border-radius:8px; border:1px solid var(--gold); color:#8a6a00; background:rgba(212,160,23,0.10); flex:none; }
+  .mbar{ display:flex; height:18px; border-radius:3px; overflow:hidden; margin-top:8px; border:1px solid var(--hair); }
+  .mseg{ display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:#fff; }
+  .mseg.demo{ background:var(--assess); } .mseg.ev{ background:#3D3F3A; } .mseg.an{ background:#5F625C; } .mseg.wr{ background:#7A7D76; }
+  .mleg{ font-size:11.5px; color:var(--paper-dim); margin-top:6px; line-height:1.5; }
+  .mleg i{ display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:5px; vertical-align:middle; }
+  .p-kv{ display:grid; grid-template-columns:90px 1fr; gap:5px 10px; font-size:12px; color:var(--paper-dim); margin-top:10px; }
+  .p-kv b{ color:var(--paper); font-weight:600; }
+  .bul{ margin:8px 0 0 16px; padding:0; font-size:12.5px; color:var(--paper-dim); line-height:1.5; }
+  .sh{ font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:0.08em; color:var(--muted); margin-top:14px; text-transform:uppercase; }
+  .lab-head{ display:flex; gap:8px; align-items:flex-start; justify-content:space-between; }
+  .lab-title{ font-weight:600; font-size:14px; }
+  .demo-box{ margin-top:10px; border:1px solid rgba(214,0,28,0.35); background:var(--assess-dim); border-radius:6px; padding:10px 12px; font-size:12px; color:var(--paper-dim); }
+  .demo-box b.h{ color:var(--assess); }
   .arc-arrow{ display:flex; align-items:center; color:var(--muted); flex:0 0 auto; padding:0 2px; }
   @media (max-width:700px){ .arc-arrow{ transform:rotate(90deg); align-self:center; } }
 
@@ -396,7 +426,7 @@
     <div class="stat"><div class="n">13</div><div class="l">teaching weeks</div></div>
     <div class="stat"><div class="n">12 × 2h</div><div class="l">SGTA problem-solving tutorials</div></div>
     <div class="stat"><div class="n">6 × 2h</div><div class="l">fortnightly practical labs</div></div>
-    <div class="stat"><div class="n">2</div><div class="l">graded lab assessments</div></div>
+    <div class="stat"><div class="n">2</div><div class="l">live lab demonstrations (part of the Lab Portfolio)</div></div>
     <div class="stat"><div class="n">1</div><div class="l">written exam assessment</div></div>
   </div>
 </header>
@@ -431,7 +461,7 @@
         <h2>Lectures, tutorials &amp; labs</h2>
       </div>
     </div>
-    <p class="sec-note">SGTA tutorials and practical labs both begin in Week 2. The totals are fixed by the CMS: 12 SGTA sessions (24 hours) and 6 practical labs (12 hours). Which week hosts which session, and the specific questions and briefs shown below, are proposed examples only and still to be worked out with Steve. The two labs marked <span class="assess-flag" style="position:static;">ASSESSED</span> are the graded design challenges.</p>
+    <p class="sec-note">SGTA tutorials and practical labs both begin in Week 2. The totals are fixed by the CMS: 12 SGTA sessions (24 hours) and 6 practical labs (12 hours). The Arc 1 lab worksheets (Labs 1 to 3) are drafted at v0.1 and run on a fortnightly cycle, so each is shown as Week 2 or 3, Week 4 or 5, and Week 6 or 7. Arc 2 placements and all SGTA questions remain proposed examples, still to be worked out with Steve. Every lab is assessed through the Lab Portfolio. The two labs flagged <span class="assess-flag" style="position:static;">DEMONSTRATION</span> (Torch and Black Box) end in a live demonstration that forms a key part of that portfolio.</p>
     <p class="sec-note">Lectures run as lectorials: content is broken into short segments with frequent full-class problem-solving activities throughout. The gold <b>Maths</b> line under each week flags one suggested point where Steve leads a dedicated maths segment; it is a starting example, not the only maths content in that lecture.</p>
     <div class="toolbar" id="toolbar">
       <div class="lane-toggle" data-lane="lecture"><span class="sw" style="background:var(--lecture)"></span>Lecture</div>
@@ -451,8 +481,9 @@
         <h2>Two arcs, six labs, one skill set each</h2>
       </div>
     </div>
-    <p class="sec-note">The two arcs and their order are confirmed. Instrumentation is introduced progressively: the multimeter and bench power supply in Lab 1, then the function generator and oscilloscope in Lab 4, so each arc only asks students to learn one new instrument family before it's needed. The week numbers shown against each lab are proposed placements, still to be finalised.</p>
+    <p class="sec-note">The two arcs and their order are confirmed. Arc 1 (DC circuits, Labs 1 to 3) has draft worksheets: click a lab to see its time plan, portfolio items and marking split. Arc 2 (Labs 4 to 6) is still an outline. Instrumentation is introduced progressively: the multimeter and bench power supply in Lab 1, then the function generator and oscilloscope in Lab 4, so each arc only asks students to learn one new instrument family before it is needed. Every lab is assessed through the Lab Portfolio, and the Torch (Lab 3) and Black Box (Lab 6) labs each end in a live demonstration that forms a key part of it.</p>
     <div class="arc-wrap" id="arcWrap"></div>
+    <p class="sec-note" style="margin-top:16px; margin-bottom:0;">The bars show how each 2-hour lab is split across its parts (A, B, C and so on). A gold underline marks a part that produces a portfolio item. Week numbers for Arc 2 are proposed placements.</p>
   </section>
 
   <!-- ============ SUGGESTIONS ============ -->
@@ -463,7 +494,7 @@
         <h2>Design notes &amp; suggestions</h2>
       </div>
     </div>
-    <div class="callout"><b>Status:</b> the lecture content below follows the current planning workbook, with a few "key takeaway" tags filled in where the source was incomplete (marked below). The two lab arcs and their order are confirmed. Which week each SGTA and lab falls on, and the specific questions and briefs shown, are proposed examples only, not yet agreed with Steve. Lab content now draws on three ELEC1310 practical worksheets (Prac 1, 2 and 3), credited per lab below. The Maths integration line under each week is a first-pass suggestion for the lectorial format, also for discussion with Steve.</div>
+    <div class="callout"><b>Status:</b> the lecture content below follows the current planning workbook, with a few "key takeaway" tags filled in where the source was incomplete (marked below). The two lab arcs and their order are confirmed. The Arc 1 lab worksheets (Labs 1 to 3) are drafted at v0.1 and summarised on this page. Arc 2 labs, SGTA questions and week placements are proposed examples only, not yet agreed with Steve. Every lab is assessed through the Lab Portfolio, and the Torch and Black Box labs each include a live demonstration that forms a key part of it. The Maths integration line under each week is a first-pass suggestion for the lectorial format, also for discussion with Steve.</div>
     <div class="notes-list" id="notesList"></div>
   </section>
 
@@ -481,13 +512,14 @@
 /* =================================================================
    DATA
    Sourced from: 1st year unit development workbook (05_ENGG1150),
-   2027 - SoE Units (Desc + ULOs / Assessments), the brief provided
-   for the LED/torch and waveform/black-box lab arcs, and three
-   ELEC1310 practical worksheets (Prac 1, 2, 3) that this unit draws
-   on for lab content, credited per lab via the "source" field.
-   The two arcs and their internal order are confirmed. Which week
-   carries each SGTA and lab, and the specific questions and briefs
-   below, are proposed examples only, still to be worked out.
+   2027 - SoE Units (Desc + ULOs / Assessments), the three drafted
+   Arc 1 lab worksheets (Labs 1 to 3, v0.1), and the ELEC1310 practical
+   worksheets (Prac 1, 2, 3) that Arc 1 builds on and the Arc 2
+   outlines draw from, credited per lab via the "source" field.
+   The two arcs and their internal order are confirmed. Labs 1 to 3
+   (drafted: true) follow their worksheets. Arc 2 labs, the week of
+   each SGTA, and the specific SGTA questions are proposed examples
+   only, still to be worked out.
    Items marked draft:true were incomplete in the source workbook
    and have been filled in for this map. Confirm with Steve Lack.
 ================================================================= */
@@ -501,7 +533,7 @@ const ULO_TEXT = {
   ULO6:"Formulate and perform complex-number operations to analyse sinusoidal-signal problems."
 };
 
-const INSTR_LABEL = { multimeter:'Multimeter', power_supply:'DC power supply', wavegen:'Function gen.', scope:'Oscilloscope' };
+const INSTR_LABEL = { multimeter:'Multimeter', power_supply:'DC power supply', wavegen:'Function gen.', scope:'Oscilloscope', breadboard:'Breadboard', calc:'Spreadsheet / Python' };
 
 const WEEKS = [
  { wk:1, topic:"Electrical fundamentals: voltage, current, work &amp; power", takeaway:"POLARITY", draft:false, ulos:['ULO1'],
@@ -515,12 +547,43 @@ const WEEKS = [
  { wk:2, topic:"Circuit elements, Ohm's Law, series &amp; parallel, linearity", takeaway:"LINEARITY", draft:false, ulos:['ULO1'],
    desc:"Introduce the fundamental components of electric circuits: resistors, voltage sources, current sources and dependent sources. Start using Ohm's Law; series and parallel combinations.",
    studentExp:"Students learn the components of a basic resistive circuit, the idea of the ideal circuit element and why it simplifies calculation and design, and the concept of linearity and why it matters to circuit analysis.",
-   mathsInt:"Maths convenor frames linearity formally (superposition, scaling) alongside the circuit examples.",
+   mathsInt:"Maths convenor frames linearity formally (superposition, scaling) alongside the circuit examples. Lab 1 then tests linearity with a least-squares line fit to measured data.",
    sgtaQ:"A four-resistor network mixing series and parallel branches. Find every branch current and voltage.",
    sgtaSteps:["Redraw the network, identifying the series and parallel groups","Reduce step by step to a single equivalent resistance","Work back out from the source using Ohm's Law at each stage","Verify the branch currents recombine correctly at every node"],
-   lab:{ title:"Instrumentation Fundamentals &amp; First LED Circuit", assessment:false, instrumentation:['multimeter','power_supply'], source:"Adapted from ELEC1310 Prac 1",
-     summary:"Safe power-supply setup using the short-circuit method to set a current limit, and safe multimeter practice (disconnect before changing range or function). Build a resistor-LED circuit, sweep the supply voltage to take simultaneous V and I readings with two multimeters, and fit Ohm's Law from the gradient. A high-wattage resistor lets students feel power dissipation directly, a tactile check on P = VI.",
-     deliverable:"Lab book entry: V-I sweep data with fitted resistance vs nominal value, and measured vs calculated LED circuit current (feeds the Lab Portfolio)." } },
+   lab:{ no:1, title:"Measure, Model, Power", tagline:"Your first circuits: resistors, power and the LED",
+     demo:false, drafted:true, weeks:"2 or 3", altWk:3,
+     instrumentation:['multimeter','power_supply'], tools:['breadboard','calc'],
+     source:"Worksheet draft v0.1, builds on ELEC1310 Prac 1",
+     summary:"Set a safe supply current limit and measure with a multimeter, then test simple models against real components: Ohm's law from a fitted I-V sweep, conservation of power in a 5 W resistor, and a constant-voltage model of the LED. Finishes with a first design to specification: a battery-powered LED with an E6 current-limiting resistor and a power-rating check.",
+     prelab:"About 45 min: predictions using reference values, then breadboard basics and a layout plan",
+     mode:"Pairs build and measure; each student keeps their own portfolio entry",
+     own:"Own parameter set: resistor R1, source voltage, LED colour, AA cell count and current window",
+     lectures:"Weeks 1 and 2 (Ohm's law, power). KVL is used informally ahead of its Week 3 lecture.",
+     highlights:[
+       "Predict, Measure, Compare in every part. A mismatch is not a failure; explaining it well is what the portfolio rewards.",
+       "Safe practice is built in: current limit set first, meter disconnected before changing range, ammeter never across a source.",
+       "The breadboard layout is planned in the pre-lab, so lab time goes on measuring."
+     ],
+     parts:[
+       {id:'A', name:"Set up: supply current limit, multimeters, breadboard check", min:25},
+       {id:'B', name:"Is a resistor really linear? Ohm's law from an I-V sweep", min:25, p:'P1'},
+       {id:'C', name:"Where does the power go? Power balance in a 5 W resistor", min:15, p:'P2'},
+       {id:'D', name:"The LED as a non-linear element", min:20, p:'P3'},
+       {id:'E', name:"Design challenge: battery-powered LED to a specification", min:25, p:'P4'},
+       {id:'W', name:"Wrap up and reflection notes", min:10, p:'P5'}
+     ],
+     portfolio:[
+       {id:'P1', name:"Testing a model with data"},
+       {id:'P2', name:"Conservation of power"},
+       {id:'P3', name:"Linear versus non-linear"},
+       {id:'P4', name:"Design to a specification"},
+       {id:'P5', name:"Reflection"}
+     ],
+     marking:[
+       {k:'ev', label:'Evidence', pct:60, tip:"Photographed meter readings, layout plan, circuit photos, data tables"},
+       {k:'an', label:'Analysis', pct:25, tip:"Predictions, fits, calculations and comparisons using your own parameter-set values"},
+       {k:'wr', label:'Written', pct:15, tip:"Short answers that refer to your own results, and the reflection"}
+     ] } },
  { wk:3, topic:"Kirchhoff's Laws: KVL &amp; KCL", takeaway:"CONSERVATION", draft:false, ulos:['ULO1'],
    desc:"Introduce Kirchhoff's Voltage and Current Laws. Begin solving basic one- and two-mesh circuit problems.",
    studentExp:"Students learn why Kirchhoff's laws exist and how they're used to find currents and voltages, and that power is conserved between elements that produce it and those that consume it.",
@@ -531,15 +594,46 @@ const WEEKS = [
  { wk:4, topic:"Node &amp; mesh analysis; simultaneous equations and matrices", takeaway:"SYSTEMATIC METHOD", draft:true, ulos:['ULO1','ULO2'],
    desc:"Introduce node and mesh analysis. Solve basic two- and three-mesh circuit problems using simultaneous equations and matrices.",
    studentExp:"Students learn the two primary systematic methods for solving circuits with more than one mesh, and how to organise the resulting equations as a matrix problem.",
-   mathsInt:"Maths convenor leads matrix solution of simultaneous equations (Gaussian elimination), worked live alongside the circuit example.",
+   mathsInt:"Maths convenor leads matrix solution of simultaneous equations (Gaussian elimination), worked live alongside the circuit example. Lab 2 reuses the matrix form (G v = i) in a spreadsheet or Python solver.",
    sgtaQ:"A three-node resistive network. Solve it once by nodal analysis and once by mesh analysis, and confirm the two methods agree.",
    sgtaSteps:["Set up nodal equations by inspection (supernode if needed)","Cast the equations as a matrix and solve","Repeat using mesh currents","Compare the two solutions: where might they disagree, and why?"],
-   lab:{ title:"LED Circuit Design", assessment:false, instrumentation:['multimeter','power_supply'], source:"Adapted from ELEC1310 Prac 1",
-     summary:"Design current-limiting resistor circuits for single and multiple LEDs from a datasheet forward-voltage rating and Ohm's Law, a direct application of Weeks 1 and 2, ahead of full diode theory. Select the nearest E6 preferred resistor value and check it against the resistor's power rating, both real constraints carried into the Torch assessment. Compare series vs parallel LED arrangements.",
-     deliverable:"Lab book entry: resistor-selection working (including E6 rounding and power-rating check) plus measured brightness/current across configurations (feeds the Lab Portfolio)." } },
+   lab:{ no:2, title:"Many Paths", tagline:"Kirchhoff's laws, nodal analysis with matrices, and sharing current between LEDs",
+     demo:false, drafted:true, weeks:"4 or 5", altWk:5,
+     instrumentation:['multimeter','power_supply'], tools:['breadboard','calc'],
+     source:"Worksheet draft v0.1",
+     summary:"Predict a five-resistor bridge circuit, which series and parallel rules cannot reduce, with a nodal matrix model (G v = i) solved in a spreadsheet or Python. Build it using link wires to measure branch currents, check KCL and KVL, and refine the model with measured resistances. Then find out why parallel LEDs do not share current equally, comparing one shared resistor with one resistor per LED.",
+     prelab:"About 45 min: build the matrix solver, then plan a bridge layout with link wires",
+     mode:"Pairs build and measure; each student keeps their own portfolio entry",
+     own:"Own parameter set: supply voltage, five bridge resistors, LED colour, shared and individual LED resistors",
+     lectures:"Weeks 3 and 4 (KCL, KVL, nodal analysis, matrices).",
+     highlights:[
+       "The bridge is the Wheatstone circuit used in strain gauges and load cells, solved the way circuit simulators solve any network.",
+       "Link wires let one breadboard build serve many branch-current measurements.",
+       "Swapping the two LEDs shows whether the current imbalance follows the LED or the position, which feeds the Lab 3 design choice."
+     ],
+     parts:[
+       {id:'A', name:"Set up and find your parameter set", min:10},
+       {id:'B', name:"Predict: solve your bridge with a matrix model", min:15, p:'P1'},
+       {id:'C', name:"Build the bridge, measure, check Kirchhoff's laws", min:35, p:'P2'},
+       {id:'D', name:"Improve the model with measured resistances", min:15, p:'P3'},
+       {id:'E', name:"Sharing current between LEDs", min:35, p:'P4'},
+       {id:'W', name:"Wrap up and reflection notes", min:10, p:'P5'}
+     ],
+     portfolio:[
+       {id:'P1', name:"A matrix model of your network"},
+       {id:'P2', name:"Kirchhoff's laws in a real circuit"},
+       {id:'P3', name:"Refining a model"},
+       {id:'P4', name:"Sharing current between LEDs"},
+       {id:'P5', name:"Reflection"}
+     ],
+     marking:[
+       {k:'ev', label:'Evidence', pct:60, tip:"Photographed meter readings, solver screenshot, layout plan, circuit photos, data tables"},
+       {k:'an', label:'Analysis', pct:25, tip:"Matrix model, predictions, Kirchhoff checks, error comparisons, current-sharing calculations"},
+       {k:'wr', label:'Written', pct:15, tip:"Short answers that refer to your own results, and the reflection"}
+     ] } },
  { wk:5, topic:"Diodes: operating points &amp; load lines", takeaway:"NONLINEARITY", draft:false, ulos:['ULO1'],
    desc:"Introduce the basic operating features of diodes. Learn how to construct operating points and load lines.",
-   studentExp:"Students are introduced to the simplest nonlinear circuit element, the key simplifications that make basic diode-circuit analysis tractable, and applications that use diodes, directly ahead of the Torch design assessment.",
+   studentExp:"Students are introduced to the simplest nonlinear circuit element, the key simplifications that make basic diode-circuit analysis tractable (including the constant-voltage-drop model already used in the Arc 1 labs), and applications that use diodes.",
    mathsInt:"Maths convenor contrasts graphical and numerical solution of a nonlinear equation (the load line) with the linear methods used so far.",
    sgtaQ:"A diode-resistor circuit driven from a fixed supply. Find the operating point graphically with a load line, then check it analytically.",
    sgtaSteps:["Sketch the diode's I–V characteristic","Derive and plot the load line set by the resistor and supply","Read off the intersection as the operating point","Repeat with the diode's simplified (constant-voltage-drop) model and compare"],
@@ -550,9 +644,48 @@ const WEEKS = [
    mathsInt:"Quick differentiation recap (dv/dt, di/dt) ahead of the constitutive equations for C and L.",
    sgtaQ:"A switch closes at t = 0 in an RC circuit. Before any calculus, reason out the capacitor voltage just before, just after, and long after the switch closes.",
    sgtaSteps:["State the capacitor voltage just before t = 0 (steady state)","Apply the continuity rule for capacitor voltage across the switching instant","Reason out the final steady-state value as t → ∞","Sketch the expected shape of v(t) between those three points"],
-   lab:{ title:"ASSESSMENT: Torch Design Challenge", assessment:true, instrumentation:['multimeter','power_supply'], source:"Adapted from ELEC1310 Prac 2",
-     summary:"Design, build and test a torch driving 5 LEDs at equal brightness (equal current), each within 10 to 20 mA, powered by 1 to 6 AA alkaline batteries (2500 mAh, 1.5 V full charge, 1.1 V at 85% discharge) and any E6 resistor. The design must keep every LED within spec at both full charge and 85% discharge, simulated on the bench by varying the supply voltage. Students predict battery life from the discharge model before testing.",
-     deliverable:"Working torch and design justification (resistor calc, measured current, battery-life estimate) at both battery states. Graded, feeds the Lab Portfolio." } },
+   lab:{ no:3, title:"Design Challenge: Deliver the Power", tagline:"Design, build, verify and demonstrate a battery-powered LED torch",
+     demo:true, drafted:true, weeks:"6 or 7", altWk:7,
+     instrumentation:['multimeter','power_supply'], tools:['breadboard','calc'],
+     source:"Worksheet draft v0.1, builds on ELEC1310 Prac 2",
+     summary:"Each student designs a torch before class to a parameter-set specification (number and colour of LEDs, current window, minimum battery life, maximum cells). In the lab the pair has the design approved, measures the LEDs it will use, builds the torch, verifies it against every requirement at fresh and discharged battery voltages, and demonstrates it live.",
+     prelab:"About 60 min, individual: design tools on a reference specification, then a design for your own parameter set",
+     mode:"Design individually; build, verify and demonstrate in pairs; each student keeps their own portfolio entry",
+     own:"Own parameter set: number and colour of LEDs, current window, minimum battery life, maximum cells",
+     lectures:"Weeks 1 to 5 and Labs 1 and 2 (LED model, current sharing).",
+     highlights:[
+       "Battery model: each AA cell falls from 1.5 V fresh to 1.1 V at 85% discharge (2500 mAh), and life is about 2125 mAh divided by the average pack current. The design must hold the current window at both ends.",
+       "Two arrangements are compared: a resistor for every LED, or LEDs in series strings with one resistor per string. Strings extend battery life but need more pack voltage.",
+       "A demonstrator approves the design before building, and the LEDs' measured forward voltages feed the final design."
+     ],
+     parts:[
+       {id:'A', name:"Set up and design review (demonstrator approves)", min:10, p:'P1'},
+       {id:'B', name:"Characterise your LEDs and finalise the design", min:15, p:'P2'},
+       {id:'C', name:"Build the torch", min:25, p:'P3'},
+       {id:'D', name:"Verify against the specification", min:30, p:'P3'},
+       {id:'E/F', name:"Demonstrate live (queue), analyse while waiting", min:30, p:'P4'},
+       {id:'W', name:"Wrap up and end-of-arc reflection", min:10, p:'P5'}
+     ],
+     portfolio:[
+       {id:'P1', name:"Your design"},
+       {id:'P2', name:"Characterising your components"},
+       {id:'P3', name:"Verifying a design"},
+       {id:'P4', name:"Demonstration and performance"},
+       {id:'P5', name:"End-of-arc reflection"}
+     ],
+     marking:[
+       {k:'demo', label:'Demonstration', pct:20, tip:"Assessed live in Part E and recorded by the demonstrator"},
+       {k:'ev', label:'Evidence', pct:45, tip:"Hand-drawn design and layout plan, design review, demonstration record, photographed readings, data tables"},
+       {k:'an', label:'Analysis', pct:20, tip:"Design options, verification against the specification, battery life, efficiency, voltage sweep"},
+       {k:'wr', label:'Written', pct:15, tip:"Short answers that refer to your own results, and the arc reflection"}
+     ],
+     demoInfo:{ heading:"Live demonstration (part of the portfolio)",
+       steps:[
+         "Pitch (30 s): state the specification, describe the design and say why it was chosen over the alternative.",
+         "Live prediction: the demonstrator sets a pack voltage between fresh and 85% discharge. The pair predicts a string current from their model, then measures it.",
+         "Question: one question about the design, answered using the circuit and the numbers."
+       ],
+       note:"About 3 minutes per pair, run as a queue in the last 40 minutes. The demonstrator keeps the official staff record of design approval and the numbers measured live, and a portfolio cannot claim more than the demonstration showed. Draft rubric (out of 6): specification shown met, live prediction accuracy, and answer to the question." } } },
  { wk:7, topic:"RC &amp; RL circuits: first-order ODEs", takeaway:"RATE OF CHANGE", draft:false, ulos:['ULO3','ULO4'],
    desc:"Find the current and voltage of RL and RC circuits as a function of time. Creating and solving first-order ODEs.",
    studentExp:"Students cover the forms of first-order circuits and why they arise; a simple one-mesh problem is worked through to a first-order ODE and solved.",
@@ -566,9 +699,9 @@ const WEEKS = [
    mathsInt:"Maths convenor introduces complex number arithmetic (rectangular and polar forms, Euler's formula) as a dedicated segment ahead of phasors.",
    sgtaQ:"Two sinusoidal sources of the same frequency but different amplitude and phase are added. Find the resulting sinusoid using complex algebra.",
    sgtaSteps:["Convert each sinusoid to a complex (rectangular) number","Add the complex numbers","Convert the result back to polar (magnitude &amp; phase) form","Write the resulting sinusoid and sanity-check it against a rough sketch of the two originals"],
-   lab:{ title:"Oscilloscope &amp; Function Generator Fundamentals", assessment:false, instrumentation:['wavegen','scope'], source:"Adapted from ELEC1310 Prac 3",
+   lab:{ no:4, title:"Oscilloscope &amp; Function Generator Fundamentals", demo:false, drafted:false, instrumentation:['wavegen','scope'], source:"Adapted from ELEC1310 Prac 3",
      summary:"Introduce the function generator (frequency, amplitude, waveform shape) and the oscilloscope (AUTO setup, MEASURE for Vpp/frequency, CURSOR placement, trigger level, timebase and vertical scale). A key lesson carried over from Prac 3: the generator's own dial cannot be trusted for amplitude, its output must be verified on the scope. Apply both to re-measure the transient RC/RL response from Week 7.",
-     deliverable:"Lab book entry: measured time constant from a scope trace, compared against the Week 7 calculation (feeds the Lab Portfolio)." } },
+     deliverable:"Portfolio evidence: measured time constant from a scope trace, compared against the Week 7 calculation." } },
  { wk:9, topic:"Phasor notation &amp; impedance", takeaway:"PHASOR DOMAIN", draft:false, ulos:['ULO5','ULO6'],
    desc:"The phasor notation and impedance: representing sinusoidal voltages and currents as complex phasors, and circuit elements as impedances.",
    studentExp:"Students learn to represent time-varying voltage and current as phasors, and see how this turns differential circuit equations into algebraic ones.",
@@ -582,9 +715,9 @@ const WEEKS = [
    mathsInt:"Full-class activity: the Week 4 matrix method re-applied with complex coefficients, showing the technique transfers directly.",
    sgtaQ:"A multi-element AC network at a fixed frequency. Apply nodal analysis in the phasor domain to find every branch current.",
    sgtaSteps:["Redraw the circuit with each element replaced by its impedance","Write nodal equations using complex (phasor) quantities","Solve the complex simultaneous equations","Convert the resulting phasors back to time-domain sinusoids"],
-   lab:{ title:"AC Signals, Impedance &amp; Phase Measurement", assessment:false, instrumentation:['wavegen','scope'], source:"Adapted from ELEC1310 Prac 3",
-     summary:"Use the function generator and dual-channel oscilloscope to measure the phase difference between voltage and current in an RC/RL circuit, repeating the measurement at two or more distinct frequencies (echoing Prac 3's 440 Hz vs 10 Hz comparison) to build direct intuition for frequency-dependent behaviour ahead of Weeks 11–12.",
-     deliverable:"Lab book entry: measured vs calculated phase and magnitude response at each tested frequency (feeds the Lab Portfolio)." } },
+   lab:{ no:5, title:"AC Signals, Impedance &amp; Phase Measurement", demo:false, drafted:false, instrumentation:['wavegen','scope'], source:"Adapted from ELEC1310 Prac 3",
+     summary:"Use the function generator and dual-channel oscilloscope to measure the phase difference between voltage and current in an RC/RL circuit, repeating the measurement at two or more distinct frequencies (echoing Prac 3's 440 Hz vs 10 Hz comparison) to build direct intuition for frequency-dependent behaviour ahead of Weeks 11 and 12.",
+     deliverable:"Portfolio evidence: measured vs calculated phase and magnitude response at each tested frequency." } },
  { wk:11, topic:"Phase, power &amp; impedance", takeaway:"PHASE", draft:false, ulos:['ULO5','ULO6'],
    desc:"The phase overlap between current and voltage, and how it affects useful power.",
    studentExp:"Students see a circuit from the frequency-domain perspective (magnitude and phase alone describe every element) and see why the phase between V and I matters for power.",
@@ -594,13 +727,16 @@ const WEEKS = [
    lab:null },
  { wk:12, topic:"Equivalent AC circuits &amp; complex-algebra applications", takeaway:"EQUIVALENCE", draft:false, ulos:['ULO5','ULO6'],
    desc:"Equivalent circuits in the AC domain: how the angular frequency of the source controls a circuit's response.",
-   studentExp:"Students apply complex-algebra methods to AC circuit analysis and see how the source's angular frequency controls the circuit's response, directly ahead of the Black Box assessment.",
+   studentExp:"Students apply complex-algebra methods to AC circuit analysis and see how the source's angular frequency controls the circuit's response, directly ahead of the Black Box demonstration.",
    mathsInt:"Callback to Week 2's linearity and superposition, now applied in the complex domain.",
    sgtaQ:"Find the AC Thévenin equivalent of a network as seen by one branch, then use it to predict that branch's current at two different frequencies.",
    sgtaSteps:["Remove the branch of interest and find the open-circuit phasor voltage","Find the equivalent impedance looking back into the network (sources zeroed)","Reattach the branch and solve for its current","Repeat at a second frequency and compare: what changed, and why?"],
-   lab:{ title:"ASSESSMENT: Black Box &amp; Anti-Phase Correction", assessment:true, instrumentation:['multimeter','wavegen','scope'],
+   lab:{ no:6, title:"Black Box &amp; Anti-Phase Correction", demo:true, drafted:false, instrumentation:['multimeter','wavegen','scope'],
      summary:"Students are given a sealed 'black box' circuit and must apply test signals and measure the magnitude/phase response to infer its internal topology and component values, then design and build a compensating 'anti-phase' correction circuit that restores the original signal's phase relationship. The build-then-redesign structure follows ELEC1310 Prac 3's inverting-to-non-inverting redesign task.",
-     deliverable:"Circuit identification, correction-circuit design and verification measurements. Graded, feeds the Lab Portfolio." } },
+     deliverable:"Portfolio evidence: circuit identification, correction-circuit design and verification measurements, plus the live demonstration.",
+     demoInfo:{ heading:"Live demonstration (proposed, part of the portfolio)",
+       steps:["Proposed to mirror Lab 3: a short pitch, a live prediction of the circuit's response at a frequency chosen by the demonstrator, and one question about the design."],
+       note:"Format and weighting still to be agreed." } } },
  { wk:13, topic:"Revision: no new topics", takeaway:"CONSOLIDATION", draft:false, ulos:['ULO1','ULO2','ULO3','ULO4','ULO5','ULO6'],
    desc:"A dedicated revision week. No new theoretical content is introduced. Students consolidate the unit's toolkit (Ohm's/Kirchhoff's Laws, nodal/mesh analysis, transient RC/RL response, and phasor/impedance methods for AC circuits) through integrative practice problems spanning the full unit, ahead of the final exam.",
    studentExp:"Students revisit and practise applying the unit's existing methods across worked problems that span DC, transient and AC circuit analysis: no new material, purely consolidation ahead of the final exam.",
@@ -615,7 +751,7 @@ const WEEKS = [
 const ASSESSMENTS = [
  { name:"Lab Portfolio", type:"Portfolio", weight:40, ulos:['ULO1','ULO2','ULO3','ULO4','ULO5','ULO6'],
    desc:"Documents practical modelling and analysis skills built through the six lab sessions, linking physical circuit behaviour to mathematical models and observed responses.",
-   feeds:"Built from all six labs, anchored by the Torch (Week 6) and Black Box (Week 12) design challenges." },
+   feeds:"Each lab contributes portfolio items (P1 to P5 in the Arc 1 drafts): photographed meter readings, plots and calculations using the student's own numbers, and short written answers. The Torch (Lab 3) and Black Box (Lab 6) live demonstrations are key parts of the portfolio. Draft marking per lab: Evidence 60%, Analysis 25%, Written 15% (Labs 1 and 2); Lab 3 adds a 20% demonstration." },
  { name:"Mini-project video demo", type:"Presentation task", weight:20, ulos:['ULO2','ULO3','ULO6'],
    desc:"In a group, model and explain the behaviour of a simple engineering system: predicting, observing and interpreting its response, and communicating that clearly on video.",
    feeds:"The unit's scaffolded \u201cenergy conversion application\u201d project, suggested to run across Weeks 9 to 12 (see notes below)." },
@@ -625,20 +761,59 @@ const ASSESSMENTS = [
 ];
 
 const LAB_ARCS = [
- { name:"Arc 1: LED circuits &amp; power delivery", sub:"Multimeter + DC power supply", labs:[2,4,6] },
- { name:"Arc 2: Waveforms &amp; phase", sub:"Function generator + oscilloscope", labs:[8,10,12] },
+ { name:"Arc 1: DC circuits", sub:"Multimeter + DC power supply", labs:[2,4,6], drafted:true },
+ { name:"Arc 2: Waveforms &amp; phase", sub:"Function generator + oscilloscope", labs:[8,10,12], drafted:false },
 ];
 
 const NOTES = [
- "<b>ELEC1310 lab content:</b> five labs now carry material adapted from the three ELEC1310 practical worksheets. Lab 1 and Lab 2 take the short-circuit method for setting a power-supply current limit, simultaneous dual-multimeter measurement, and fitting Ohm's Law from a voltage sweep, from Prac 1. The Torch assessment (Lab 3) now uses Prac 2's full specification: 5 LEDs at equal current, 10 to 20 mA, 1 to 6 AA alkaline batteries, and the requirement to meet spec at both full charge and 85% discharge using the real battery discharge figures, a stronger design constraint than the earlier draft. Lab 4 and Lab 5 take Prac 3's scope/generator discipline (verify the generator's output on the scope, don't trust its dial) and its build-then-redesign structure, which also informed how the Black Box assessment (Lab 6) is framed.",
- "<b>Maths integration (lectorial format):</b> each week now has a one-line suggestion for where a dedicated maths segment could sit, for example Steve introducing complex number arithmetic in Week 8, directly ahead of phasors. These are illustrative starting points for the lectorial structure (content broken up with full-class problem-solving activities throughout), not a complete lesson plan, and need Steve's input to firm up.",
- "The Week 4 LED-building lab deliberately sits between the Ohm's Law lecture (Week 2) and the diode-theory lecture (Week 5): it only needs a datasheet forward-voltage figure and Ohm's Law, so students aren't left waiting on diode theory to build something. Full load-line analysis then lands (Week 5) right before it's needed for the <b>Torch assessment (Week 6)</b>. Worth confirming this ordering is intentional when you and Steve lock the schedule.",
- "The original planning notes tag Week 7 as <b>\u201cPrac Test\u201d</b>, but no activity is defined for it yet. Since the two graded lab assessments already sit at Weeks 6 and 12, this could be a short, low-stakes instrumentation/skills checkpoint instead (e.g. a 15-minute practical multimeter/scope competency check) rather than a third graded design task, or it could be dropped if it was only a placeholder from the earlier weekly-lab draft.",
- "The planning notes also flag an open question: <b>should pre-lab work count toward participation marks?</b> A lightweight pre-lab quiz (complete/incomplete, not skills-graded) that feeds a separate professional-engagement component would let the Lab Portfolio stay focused on demonstrated practical skill, while still rewarding preparation.",
- "To bring the SGTA total down from 13 x 2h (26h) to the CMS's 24h, <b>Week 1 has no SGTA</b>. Tutorials and practical labs both start in Week 2, which also lines up with Lab 1 already sitting at Week 2. Week 13 keeps its original big-question tutorial. As above, this week-1 placement is itself a proposed example, not a fixed decision.",
+ "<b>Arc 1 worksheets drafted:</b> Labs 1 to 3 have v0.1 worksheets, summarised in each lab's detail panel. They share one structure: a pre-lab of predictions and layout planning, Predict, Measure, Compare in the lab, pairs building together, and an individual portfolio entry (items P1 to P5) per student. Results are individualised by a parameter set taken from the last digit of the MQ student number, and every meter photo carries the student's MQ ID card. Lab 1 builds on ELEC1310 Prac 1 and Lab 3 on Prac 2. Labs 4 to 6 remain outlines, drawing on Prac 3.",
+ "<b>Maths integration (lectorial format):</b> each week has a one-line suggestion for where a dedicated maths segment could sit, for example Steve introducing complex number arithmetic in Week 8, directly ahead of phasors. The Arc 1 labs add two natural hooks: Lab 1 fits a least-squares line to test Ohm's law (Week 2 linearity), and Lab 2 solves G v = i for a bridge circuit in a spreadsheet or Python (Week 4 matrices). The suggestions are starting points and need Steve's input to firm up.",
+ "<b>Lab and lecture sequencing:</b> on a fortnightly cycle, students attend Lab 1 in Week 2 or 3, Lab 2 in Week 4 or 5 and Lab 3 in Week 6 or 7, so some will meet a lab in the same week as its lecture content. Lab 1's pre-lab uses KVL informally ahead of Week 3. Lab 2's pre-lab needs nodal analysis and matrix solution (the Week 4 lecture) from students attending in Week 4, so that lecture would need to land before the lab, or the pre-lab be made self-contained.",
+ "<b>Arc 2 placement:</b> if the fortnightly pattern continues, Labs 4 to 6 would fall in Weeks 8 or 9, 10 or 11, and 12 or 13. That would put the Black Box demonstration in the Week 13 revision week for half the cohort, so the Arc 2 timing needs deciding.",
+ "<b>Demonstrations:</b> the Lab 3 draft assumes about 3 minutes per pair, run as a queue in the last 40 minutes of the lab, with one demonstrator covering 10 to 12 pairs. The demonstrator keeps a staff record of design approval and the numbers measured live; the storage method is still to be confirmed. The Black Box demonstration is proposed to follow the same format.",
+ "The original planning notes tag Week 7 as <b>“Prac Test”</b> with no activity defined. With Lab 3 now running in Week 6 or 7 and ending in a live demonstration, Arc 1 already has a practical checkpoint, so a separate prac test may not be needed.",
+ "The planning notes also ask whether <b>pre-lab work should count toward participation marks</b>. In the Arc 1 drafts, pre-lab work (predictions, layout plans, design working) is already part of the portfolio evidence, which may remove the need for a separate participation component.",
+ "To bring the SGTA total down from 13 x 2h (26h) to the CMS's 24h, <b>Week 1 has no SGTA</b>. Tutorials and practical labs both start in Week 2, which also lines up with Lab 1 (Week 2 or 3). Week 13 keeps its original big-question tutorial. This week-1 placement is itself a proposed example, not a fixed decision.",
  "The Mini-project's ULO coverage (ULO2 nodal equations, ULO3 energy storage/transients, ULO6 complex operations for sinusoids) spans both the DC/transient block and the AC block. Anchoring it to a system that genuinely bridges both, e.g. a small AC-input charging circuit feeding a transient RC load, would stop it feeling bolted onto only one half of the unit.",
- "Weeks 4, 8 and 10 still don't have a confirmed \u201ckey takeaway\u201d word in the source planning sheet. Fill-ins have been proposed, marked with a dashed border in the timeline below; flag these for confirmation with Steve rather than treating them as settled.",
+ "Weeks 4, 8 and 10 still don't have a confirmed “key takeaway” word in the source planning sheet. Fill-ins have been proposed, marked with a dashed border in the timeline below; flag these for confirmation with Steve rather than treating them as settled.",
 ];
+
+
+/* =================================================================
+   LAB RENDER HELPERS
+================================================================= */
+const chips = list => (list||[]).map(i=>`<span class="instr-chip">${INSTR_LABEL[i]}</span>`).join('');
+const stChip = lab => lab.drafted ? '<span class="st-chip drafted">WORKSHEET DRAFT v0.1</span>' : '<span class="st-chip outline">OUTLINE ONLY</span>';
+const timeBar = (parts, mini) => {
+  const tot = parts.reduce((a,b)=>a+b.min,0);
+  return `<div class="tbar ${mini?'mini':''}">${parts.map(x=>`<div class="tseg ${x.p?'hasp':''}" style="width:${x.min/tot*100}%" title="${x.id}: ${x.name} (${x.min} min)"></div>`).join('')}</div>`;
+};
+const markBar = m => `<div class="mbar">${m.map(x=>`<div class="mseg ${x.k}" style="width:${x.pct}%" title="${x.label}: ${x.tip}">${x.pct}%</div>`).join('')}</div>
+  <div class="mleg">${m.map(x=>`<div><i class="mseg ${x.k}" style="padding:0"></i><b>${x.label} ${x.pct}%</b> ${x.tip}</div>`).join('')}</div>`;
+function labPanel(w){
+  const l = w.lab;
+  let h = `<h4>Practical lab</h4><div class="p-lab-box ${l.demo?'assess':''}">
+    <div class="lab-head"><div><div class="lab-title">Lab ${l.no}: ${l.title}</div>${l.tagline?`<div class="tg">${l.tagline}</div>`:''}</div>${l.demo?'<span class="assess-flag" style="position:static;">DEMONSTRATION</span>':''}</div>
+    <div class="instr" style="margin-top:8px;">${chips(l.instrumentation)}${chips(l.tools)}</div>
+    <div style="margin-top:8px;">${stChip(l)} <span class="st-chip">${l.drafted?'WEEK '+l.weeks.toUpperCase():'PROPOSED WEEK '+w.wk}</span></div>
+    <p class="desc" style="margin-top:9px;">${l.summary}</p>`;
+  if(l.drafted){
+    h += `<div class="p-kv"><b>Pre-lab</b><span>${l.prelab}</span><b>Working mode</b><span>${l.mode}</span><b>Own numbers</b><span>${l.own}</span><b>Draws on</b><span>${l.lectures}</span></div>
+    <div class="sh">Highlights</div><ul class="bul">${l.highlights.map(x=>`<li>${x}</li>`).join('')}</ul>
+    <div class="sh">Time plan (${l.parts.reduce((a,b)=>a+b.min,0)} min, gold underline = portfolio item)</div>
+    ${timeBar(l.parts,false)}
+    <div class="plist">${l.parts.map(x=>`<div class="prow"><span class="m">${x.id} · ${x.min}m</span><span style="flex:1">${x.name}</span>${x.p?`<span class="pchip">${x.p}</span>`:''}</div>`).join('')}</div>
+    <div class="sh">Portfolio items</div><ul class="bul">${l.portfolio.map(x=>`<li><b>${x.id}</b> ${x.name}</li>`).join('')}</ul>
+    <div class="sh">Draft marking weights</div>${markBar(l.marking)}`;
+  } else {
+    h += `<div class="del"><b>Deliverable:</b> ${l.deliverable}</div>
+    ${l.source?`<div class="del" style="border-top:none; padding-top:0; margin-top:4px;"><b>Source:</b> ${l.source}</div>`:''}`;
+  }
+  if(l.demoInfo){
+    h += `<div class="demo-box"><b class="h">${l.demoInfo.heading}</b><ul class="bul" style="margin-top:6px;">${l.demoInfo.steps.map(x=>`<li>${x}</li>`).join('')}</ul>${l.demoInfo.note?`<div style="margin-top:6px;font-style:italic;">${l.demoInfo.note}</div>`:''}</div>`;
+  }
+  return h + '</div>';
+}
 
 /* =================================================================
    RENDER: assessment cards
@@ -690,14 +865,24 @@ WEEKS.forEach(w=>{
   const sgtaLbl = w.noSgta ? 'NO SGTA THIS WEEK' : 'SGTA · PROPOSED QUESTION';
   const lab = w.lab;
   const labHTML = lab ? `
-    <div class="wk-lab ${lab.assessment ? 'assess':''}" data-lane="lab">
+    <div class="wk-lab clk ${lab.demo ? 'assess':''}" data-lane="lab" data-jump="${w.wk}">
       <div class="bar"></div>
       <div style="flex:1">
-        <div class="lbl">PRACTICAL LAB · PROPOSED WEEK ${w.wk}</div>
+        <div class="lbl">${lab.drafted ? `PRACTICAL LAB ${lab.no} · WEEK ${lab.weeks.toUpperCase()}` : `PRACTICAL LAB ${lab.no} · PROPOSED WEEK ${w.wk}`}</div>
         <div class="name">${lab.title}</div>
-        <div class="instr">${lab.instrumentation.map(i=>`<span class="instr-chip">${INSTR_LABEL[i]}</span>`).join('')}</div>
+        ${lab.tagline ? `<div class="tg">${lab.tagline}</div>` : ''}
+        <div class="instr">${chips(lab.instrumentation)}${stChip(lab)}</div>
       </div>
-      ${lab.assessment ? '<span class="assess-flag">ASSESSED</span>' : ''}
+      ${lab.demo ? '<span class="assess-flag">DEMONSTRATION</span>' : ''}
+    </div>` : '';
+  const hostW = WEEKS.find(x=>x.lab && x.lab.altWk===w.wk);
+  const altHTML = hostW ? `
+    <div class="wk-lab alt clk" data-lane="lab" data-jump="${hostW.wk}">
+      <div class="bar"></div>
+      <div style="flex:1">
+        <div class="lbl">ALSO RUNS THIS WEEK · LAB ${hostW.lab.no}</div>
+        <div class="name">${hostW.lab.title}</div>
+      </div>
     </div>` : '';
 
   row.innerHTML = `
@@ -719,7 +904,7 @@ WEEKS.forEach(w=>{
           <div class="q">${w.sgtaQ}</div>
         </div>
       </div>
-      ${labHTML}
+      ${labHTML}${altHTML}
       <button type="button" class="expand-hint" data-jump="${w.wk}">+ full week detail</button>
     </div>
   `;
@@ -738,10 +923,13 @@ LAB_ARCS.forEach(arc=>{
     const w = WEEKS.find(x=>x.wk===wkNum);
     const lab = w.lab;
     const node = `
-      <div class="arc-node ${lab.assessment ? 'assess':''}" data-jump="${wkNum}" style="cursor:pointer;">
-        <div class="wk">LAB ${i+1}${lab.assessment ? ' · ASSESSED' : ''} · proposed week ${wkNum}</div>
-        <div class="t">${lab.title.replace('ASSESSMENT: ','')}</div>
-        <div class="instr">${lab.instrumentation.map(i=>`<span class="instr-chip">${INSTR_LABEL[i]}</span>`).join('')}</div>
+      <div class="arc-node ${lab.demo ? 'assess':''}" data-jump="${wkNum}" style="cursor:pointer;">
+        <div class="wk">LAB ${lab.no} · ${lab.drafted ? 'WEEK '+lab.weeks.toUpperCase() : 'PROPOSED WEEK '+wkNum}${lab.demo ? ' · DEMONSTRATION' : ''}</div>
+        <div class="t">${lab.title}</div>
+        ${lab.tagline ? `<div class="tg">${lab.tagline}</div>` : ''}
+        ${lab.parts ? timeBar(lab.parts,true) : ''}
+        <div class="instr">${chips(lab.instrumentation)}</div>
+        <div style="margin-top:7px;">${stChip(lab)}</div>
         ${lab.source ? `<div class="src">${lab.source}</div>` : ''}
       </div>`;
     return i < arc.labs.length-1 ? node + `<div class="arc-arrow">${arrowSVG}</div>` : node;
@@ -805,18 +993,7 @@ function openWeek(wkNum){
     ${w.sgtaSteps.length ? `<ol class="steps">${w.sgtaSteps.map((s,i)=>`<li><span class="n">${i+1}</span><span>${s}</span></li>`).join('')}</ol>` : ''}
   `;
 
-  if(w.lab){
-    html += `
-      <h4>Practical lab (proposed week)</h4>
-      <div class="p-lab-box ${w.lab.assessment ? 'assess':''}">
-        <div style="font-weight:600; font-size:13.5px;">${w.lab.title}${w.lab.assessment ? ' <span class="assess-flag" style="position:static;">ASSESSED</span>':''}</div>
-        <div class="instr" style="margin-top:8px;">${w.lab.instrumentation.map(i=>`<span class="instr-chip">${INSTR_LABEL[i]}</span>`).join('')}</div>
-        <p class="desc" style="margin-top:9px;">${w.lab.summary}</p>
-        <div class="del"><b>Deliverable:</b> ${w.lab.deliverable}</div>
-        ${w.lab.source ? `<div class="del" style="border-top:none; padding-top:0; margin-top:4px;"><b>Source:</b> ${w.lab.source}</div>` : ''}
-      </div>
-    `;
-  }
+  if(w.lab){ html += labPanel(w); }
 
   html += `
     <h4>ULO focus (indicative)</h4>
