@@ -190,6 +190,33 @@
   }
   .ulo-chip:hover{ border-color:var(--paper-dim); color:var(--paper); }
   .ulo-chip.active{ background:var(--sgta); border-color:var(--sgta); color:#fff; }
+  .jump-nav{ display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:16px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.04em; }
+  .jump-nav span{ color:var(--muted); }
+  .jump-nav a{ color:var(--brand); text-decoration:none; border-bottom:1px solid transparent; }
+  .jump-nav a:hover, .jump-nav a:focus-visible{ border-bottom-color:var(--brand); }
+  .ulo-btn{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--brand); background:none; border:1px solid var(--brand); border-radius:10px; padding:3px 9px; cursor:pointer; }
+  .ulo-btn:hover{ background:var(--brand); color:#fff; }
+  .ulo-table{ border:1px solid var(--hair); border-radius:6px; overflow:hidden; background:linear-gradient(180deg,var(--panel),var(--panel-2)); }
+  .ulo-row{ display:grid; grid-template-columns:64px minmax(0,1fr) repeat(3, 76px); gap:12px; align-items:center; padding:12px 16px; border-top:1px solid var(--hair); }
+  .ulo-row:first-child{ border-top:none; }
+  .ulo-row.head{ font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:0.08em; color:var(--muted); padding-top:10px; padding-bottom:10px; }
+  .ulo-row.head div:nth-child(n+3){ text-align:center; }
+  .ulo-row .txt{ font-size:13px; line-height:1.5; color:var(--paper); }
+  .ulo-row .cov{ text-align:center; font-family:'IBM Plex Mono',monospace; font-size:10px; }
+  .ulo-row .cov .y{ display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--assess); vertical-align:middle; }
+  .ulo-row .cov .n{ display:inline-block; width:12px; height:12px; border-radius:50%; border:1px solid var(--hair); vertical-align:middle; }
+  .ulo-row .cov .lbl{ display:none; }
+  @media (max-width:700px){
+    .ulo-row{ grid-template-columns:56px minmax(0,1fr); }
+    .ulo-row.head{ display:none; }
+    .ulo-row .covs{ grid-column:2; display:flex; flex-wrap:wrap; gap:6px 12px; }
+    .ulo-row .cov{ text-align:left; }
+    .ulo-row .cov .lbl{ display:inline; margin-left:5px; color:var(--muted); }
+  }
+  @media (min-width:701px){ .ulo-row .covs{ display:contents; } }
+  .st-chip.rework{ color:var(--assess); border-color:var(--assess); background:var(--assess-dim); }
+  .rework-box{ margin-top:10px; border:1px dashed var(--assess); border-radius:6px; padding:9px 12px; font-size:12px; line-height:1.5; color:var(--paper-dim); }
+  .rework-box b{ color:var(--assess); }
   .a-card .a-feeds{ font-size:11px; color:var(--muted); margin-top:10px; border-top:1px dashed var(--hair); padding-top:9px; }
 
   /* ---------- LEGEND / TOOLBAR ---------- */
@@ -429,6 +456,7 @@
     <div class="stat"><div class="n">2</div><div class="l">assessed practical demonstrations (Labs 3 and 6)</div></div>
     <div class="stat"><div class="n">1</div><div class="l">written exam assessment</div></div>
   </div>
+  <nav class="jump-nav" aria-label="Page sections"><span>JUMP TO</span><a href="#mission-sec">Mission</a><a href="#assess-sec">Assessment</a><a href="#ulo-sec">Learning outcomes</a><a href="#timeline-sec">Week by week</a><a href="#labs-sec">Labs</a><a href="#notes-sec">Design notes</a></nav>
 </header>
 
 <main>
@@ -449,8 +477,20 @@
         <h2>Assessment overview</h2>
       </div>
     </div>
-    <p class="sec-note">Click a unit learning outcome (ULO) chip to highlight every week below that builds toward it.</p>
+    <p class="sec-note">Click a unit learning outcome (ULO) chip to highlight every week below that builds toward it. <button type="button" class="ulo-btn" id="uloJump">Read the ULOs</button></p>
     <div class="assess-grid" id="assessGrid"></div>
+  </section>
+
+  <!-- ============ LEARNING OUTCOMES ============ -->
+  <section id="ulo-sec">
+    <div class="sec-head">
+      <div>
+        <div class="sec-eyebrow">WHAT STUDENTS WILL BE ABLE TO DO</div>
+        <h2>Unit learning outcomes</h2>
+      </div>
+    </div>
+    <p class="sec-note">The six ULOs as entered in the CMS (these can no longer be reworded for 2027), with the assessments that cover each. Click a ULO to highlight the weeks that build toward it.</p>
+    <div class="ulo-table" id="uloTable"></div>
   </section>
 
   <!-- ============ WEEKLY TIMELINE ============ -->
@@ -461,7 +501,7 @@
         <h2>Lectures, tutorials &amp; labs</h2>
       </div>
     </div>
-    <p class="sec-note">SGTA tutorials and practical labs both begin in Week 2. The totals are fixed by the CMS: 12 SGTA sessions (24 hours) and 6 practical labs (12 hours). The Arc 1 lab worksheets (Labs 1 to 3) are drafted at v0.1 and run on a fortnightly cycle, so each is shown as Week 2 or 3, Week 4 or 5, and Week 6 or 7. Arc 2 placements and all SGTA questions remain proposed examples, still to be worked out with Steve. Labs 1, 2, 4 and 5 are not assessed: they build the skills for the two labs flagged <span class="assess-flag" style="position:static;">ASSESSED</span>, which end each arc with a practical demonstration (Lab 3, 30%; Lab 6, 20%).</p>
+    <p class="sec-note">SGTA tutorials and practical labs both begin in Week 2. The totals are fixed by the CMS: 12 SGTA sessions (24 hours) and 6 practical labs (12 hours). The Arc 1 lab worksheets (Labs 1 to 3) are drafted at v0.1, need reworking for the new assessment structure, and run on a fortnightly cycle, so each is shown as Week 2 or 3, Week 4 or 5, and Week 6 or 7. Arc 2 placements and all SGTA questions remain proposed examples, still to be worked out with Steve. Labs 1, 2, 4 and 5 are not assessed: they build the skills for the two labs flagged <span class="assess-flag" style="position:static;">ASSESSED</span>, which end each arc with a practical demonstration (Lab 3, 30%; Lab 6, 20%).</p>
     <p class="sec-note">Lectures run as lectorials: content is broken into short segments with frequent full-class problem-solving activities throughout. The gold <b>Maths</b> line under each week flags one suggested point where Steve leads a dedicated maths segment; it is a starting example, not the only maths content in that lecture.</p>
     <div class="toolbar" id="toolbar">
       <div class="lane-toggle" data-lane="lecture"><span class="sw" style="background:var(--lecture)"></span>Lecture</div>
@@ -481,7 +521,7 @@
         <h2>Two arcs, six labs, one skill set each</h2>
       </div>
     </div>
-    <p class="sec-note">The two arcs and their order are confirmed. Arc 1 (DC circuits, Labs 1 to 3) has draft worksheets: click a lab to see its time plan and worksheet items. Arc 2 (Labs 4 to 6) is still an outline. Instrumentation is introduced progressively: the multimeter and bench power supply in Lab 1, then the function generator and oscilloscope in Lab 4, so each arc only asks students to learn one new instrument family before it is needed. Only the arc-final labs are assessed: the Torch (Lab 3) is Practical Demonstration 1 and the Black Box (Lab 6) is Practical Demonstration 2.</p>
+    <p class="sec-note">The two arcs and their order are confirmed. Arc 1 (DC circuits, Labs 1 to 3) has draft worksheets, but they were written for the earlier Lab Portfolio model and are flagged <span class="st-chip rework">NEEDS REWORK</span> until they are revised for the new assessment structure. Click a lab to see its time plan, worksheet items and what needs changing. Arc 2 (Labs 4 to 6) is still an outline. Instrumentation is introduced progressively: the multimeter and bench power supply in Lab 1, then the function generator and oscilloscope in Lab 4, so each arc only asks students to learn one new instrument family before it is needed. Only the arc-final labs are assessed: the Torch (Lab 3) is Practical Demonstration 1 and the Black Box (Lab 6) is Practical Demonstration 2.</p>
     <div class="arc-wrap" id="arcWrap"></div>
     <p class="sec-note" style="margin-top:16px; margin-bottom:0;">The bars show how each 2-hour lab is split across its parts (A, B, C and so on). A gold underline marks a part that produces a worksheet record item. Week numbers for Arc 2 are proposed placements.</p>
   </section>
@@ -494,7 +534,7 @@
         <h2>Design notes &amp; suggestions</h2>
       </div>
     </div>
-    <div class="callout"><b>Status:</b> the lecture content below follows the current planning workbook, with a few "key takeaway" tags filled in where the source was incomplete (marked below). The two lab arcs and their order are confirmed. The Arc 1 lab worksheets (Labs 1 to 3) are drafted at v0.1 and summarised on this page. Arc 2 labs, SGTA questions and week placements are proposed examples only, not yet agreed with Steve. Assessment changed in October 2026 to a written exam (50%) and two practical demonstrations (30% and 20%); the Lab Portfolio and mini-project video have been removed. The Arc 1 worksheets were drafted for the portfolio model and still need revising to match (see note 1). The Maths integration line under each week is a first-pass suggestion for the lectorial format, also for discussion with Steve.</div>
+    <div class="callout"><b>Status:</b> the lecture content below follows the current planning workbook, with a few "key takeaway" tags filled in where the source was incomplete (marked below). The two lab arcs and their order are confirmed. The Arc 1 lab worksheets (Labs 1 to 3) are drafted at v0.1 and summarised on this page, but all three need reworking for the new assessment structure. Arc 2 labs, SGTA questions and week placements are proposed examples only, not yet agreed with Steve. Assessment changed in October 2026 to a written exam (50%) and two practical demonstrations (30% and 20%); the Lab Portfolio and mini-project video have been removed. The Arc 1 worksheets were drafted for the portfolio model and still need revising to match (see note 1). The Maths integration line under each week is a first-pass suggestion for the lectorial format, also for discussion with Steve.</div>
     <div class="notes-list" id="notesList"></div>
   </section>
 
@@ -525,12 +565,12 @@
 ================================================================= */
 
 const ULO_TEXT = {
-  ULO1:"Analyse simple engineering systems using Ohm's Law, Kirchhoff's Laws and nodal analysis.",
-  ULO2:"Formulate mathematical models and solve them using linear algebra methods to derive and analyse nodal equations.",
-  ULO3:"Model and predict system behaviour involving energy storage and dissipation, including steady-state and transient RLC response.",
-  ULO4:"Formulate and solve first-order ODEs to describe and predict time-domain circuit behaviour.",
+  ULO1:"Analyse simple engineering systems by applying fundamental physical laws and systematic analysis techniques, including Ohm's Law, Kirchhoff's Laws, and nodal analysis.",
+  ULO2:"Formulate mathematical models of engineering systems and solve them using linear algebra methods to derive and analyse nodal equations.",
+  ULO3:"Model and predict system behaviour involving energy storage and dissipation, including steady-state and transient responses of systems containing resistive, capacitive, and inductive elements.",
+  ULO4:"Formulate and solve first-order ordinary differential equations to describe and predict the time-domain behaviour of engineering systems.",
   ULO5:"Represent and interpret time-varying sinusoidal signals using complex numbers and phasor notation.",
-  ULO6:"Formulate and perform complex-number operations to analyse sinusoidal-signal problems."
+  ULO6:"Formulate and perform complex number operations to analyse and solve problems involving sinusoidal signals in engineering systems."
 };
 
 const INSTR_LABEL = { multimeter:'Multimeter', power_supply:'DC power supply', wavegen:'Function gen.', scope:'Oscilloscope', breadboard:'Breadboard', calc:'Spreadsheet / Python' };
@@ -552,6 +592,7 @@ const WEEKS = [
    sgtaSteps:["Redraw the network, identifying the series and parallel groups","Reduce step by step to a single equivalent resistance","Work back out from the source using Ohm's Law at each stage","Verify the branch currents recombine correctly at every node"],
    lab:{ no:1, title:"Measure, Model, Power", tagline:"Your first circuits: resistors, power and the LED",
      demo:false, drafted:true, weeks:"2 or 3", altWk:3,
+     rework:"Written for the Lab Portfolio, which no longer exists. Remove the portfolio items, marking weights and photo-with-ID evidence requirements, and refocus the lab as unassessed preparation for Practical Demonstration 1 (safe measurement, the LED model, designing to a specification).",
      instrumentation:['multimeter','power_supply'], tools:['breadboard','calc'],
      source:"Worksheet draft v0.1, builds on ELEC1310 Prac 1",
      summary:"Set a safe supply current limit and measure with a multimeter, then test simple models against real components: Ohm's law from a fitted I-V sweep, conservation of power in a 5 W resistor, and a constant-voltage model of the LED. Finishes with a first design to specification: a battery-powered LED with an E6 current-limiting resistor and a power-rating check.",
@@ -594,6 +635,7 @@ const WEEKS = [
    sgtaSteps:["Set up nodal equations by inspection (supernode if needed)","Cast the equations as a matrix and solve","Repeat using mesh currents","Compare the two solutions: where might they disagree, and why?"],
    lab:{ no:2, title:"Many Paths", tagline:"Kirchhoff's laws, nodal analysis with matrices, and sharing current between LEDs",
      demo:false, drafted:true, weeks:"4 or 5", altWk:5,
+     rework:"Written for the Lab Portfolio, which no longer exists. Remove the portfolio items, marking weights and photo-with-ID evidence requirements, and refocus the lab as unassessed preparation for Practical Demonstration 1. Its matrix model and current-sharing parts feed directly into the torch design report.",
      instrumentation:['multimeter','power_supply'], tools:['breadboard','calc'],
      source:"Worksheet draft v0.1",
      summary:"Predict a five-resistor bridge circuit, which series and parallel rules cannot reduce, with a nodal matrix model (G v = i) solved in a spreadsheet or Python. Build it using link wires to measure branch currents, check KCL and KVL, and refine the model with measured resistances. Then find out why parallel LEDs do not share current equally, comparing one shared resistor with one resistor per LED.",
@@ -636,6 +678,7 @@ const WEEKS = [
    sgtaSteps:["State the capacitor voltage just before t = 0 (steady state)","Apply the continuity rule for capacitor voltage across the switching instant","Reason out the final steady-state value as t → ∞","Sketch the expected shape of v(t) between those three points"],
    lab:{ no:3, title:"Design Challenge: Deliver the Power", tagline:"Practical Demonstration 1: design, build, verify and demonstrate a battery-powered LED torch",
      demo:true, drafted:true, weeks:"6 or 7", altWk:7,
+     rework:"Must be restructured as Practical Demonstration 1. The pre-lab design becomes an individually graded design and short report (including a matrix model of the torch), graded by the teaching associate in the lab. The in-lab build and demonstration becomes the pair component. Replace the portfolio items, the Evidence/Analysis/Written split and the draft demonstration rubric with a rubric for the new 20% + 10% structure.",
      instrumentation:['multimeter','power_supply'], tools:['breadboard','calc'],
      source:"Worksheet draft v0.1, builds on ELEC1310 Prac 2",
      summary:"Each student designs a torch before class to a parameter-set specification (number and colour of LEDs, current window, minimum battery life, maximum cells). In the lab the pair has the design approved, measures the LEDs it will use, builds the torch, verifies it against every requirement at fresh and discharged battery voltages, and demonstrates it live.",
@@ -758,7 +801,8 @@ const LAB_ARCS = [
 ];
 
 const NOTES = [
- "<b>Assessment restructure (October 2026):</b> the Lab Portfolio (40%), mini-project video (20%) and exam (40%) are replaced by Practical Demonstration 1 (30%, Lab 3), Practical Demonstration 2 (20%, Lab 6) and a 2-hour written exam (50%). The Arc 1 worksheets (v0.1) were written for the portfolio model, so their portfolio items, evidence weightings and photo-with-ID requirements need revising. Labs 1 and 2 become unassessed preparation, and Lab 3 needs restructuring around the individual pre-lab design and short report. Its parameter sets, taken from the MQ student number, already provide the unique constraints each student needs.",
+ "<b>Assessment restructure (October 2026):</b> the Lab Portfolio (40%), mini-project video (20%) and exam (40%) are replaced by Practical Demonstration 1 (30%, Lab 3), Practical Demonstration 2 (20%, Lab 6) and a 2-hour written exam (50%).",
+ "<b>Lab worksheets 1 to 3 need reworking.</b> All three v0.1 drafts were written for the Lab Portfolio model, so their portfolio items (P1 to P5), Evidence/Analysis/Written marking weights and photo-with-ID evidence requirements no longer apply. Labs 1 and 2 become unassessed preparation for Practical Demonstration 1. Lab 3 must be restructured around an individually graded pre-lab design and short report (20%) followed by a pair build and demonstration (10%). Its parameter sets, taken from the MQ student number, already provide the unique constraints each student needs. Each lab's detail panel lists what needs changing.",
  "<b>ULO coverage:</b> the exam covers all six ULOs. Practical Demonstration 1 covers ULO1 and the dissipation side of ULO3, and covers ULO2 if the individual report must include a nodal model of the torch solved as a matrix (including the battery's internal resistance couples the LED branches). Practical Demonstration 2 can cover ULO1 and ULO3 to ULO6, provided the task uses a step test (time constant, first-order ODE), a sinusoidal test (gain and phase as a phasor) and an impedance-based correction design.",
  "<b>Pair marks:</b> 30% of the unit grade is earned in pairs (the 10% Lab 3 demonstration and all of Practical Demonstration 2). Directing questions at each student individually, and stating that marks may be differentiated where contributions clearly differ, protects against one student carrying the other.",
  "<b>Analysis method:</b> there is a request to teach mesh analysis only, rather than nodal and mesh. ULO1 names nodal analysis and ULO2 requires nodal equations, and the ULOs can no longer be reworded. Lab 2, the Week 10 SGTA and the later units ELEC2120 and ELEC2130 also build on nodal analysis. This is unresolved, so the map still shows node and mesh analysis in Weeks 4 and 10.",
@@ -775,7 +819,7 @@ const NOTES = [
    LAB RENDER HELPERS
 ================================================================= */
 const chips = list => (list||[]).map(i=>`<span class="instr-chip">${INSTR_LABEL[i]}</span>`).join('');
-const stChip = lab => lab.drafted ? '<span class="st-chip drafted">WORKSHEET DRAFT v0.1</span>' : '<span class="st-chip outline">OUTLINE ONLY</span>';
+const stChip = lab => lab.drafted ? '<span class="st-chip drafted">WORKSHEET DRAFT v0.1</span>' + (lab.rework ? ' <span class="st-chip rework">NEEDS REWORK</span>' : '') : '<span class="st-chip outline">OUTLINE ONLY</span>';
 const timeBar = (parts, mini) => {
   const tot = parts.reduce((a,b)=>a+b.min,0);
   return `<div class="tbar ${mini?'mini':''}">${parts.map(x=>`<div class="tseg ${x.p?'hasp':''}" style="width:${x.min/tot*100}%" title="${x.id}: ${x.name} (${x.min} min)"></div>`).join('')}</div>`;
@@ -788,6 +832,7 @@ function labPanel(w){
     <div class="lab-head"><div><div class="lab-title">Lab ${l.no}: ${l.title}</div>${l.tagline?`<div class="tg">${l.tagline}</div>`:''}</div>${l.demo?'<span class="assess-flag" style="position:static;">ASSESSED</span>':''}</div>
     <div class="instr" style="margin-top:8px;">${chips(l.instrumentation)}${chips(l.tools)}</div>
     <div style="margin-top:8px;">${stChip(l)} <span class="st-chip">${l.drafted?'WEEK '+l.weeks.toUpperCase():'PROPOSED WEEK '+w.wk}</span></div>
+    ${l.rework ? `<div class="rework-box"><b>Needs rework for the new assessment structure.</b> ${l.rework}</div>` : ''}
     <p class="desc" style="margin-top:9px;">${l.summary}</p>`;
   if(l.drafted){
     h += `<div class="p-kv"><b>Pre-lab</b><span>${l.prelab}</span><b>Working mode</b><span>${l.mode}</span><b>Own numbers</b><span>${l.own}</span><b>Draws on</b><span>${l.lectures}</span></div>
@@ -825,6 +870,19 @@ ASSESSMENTS.forEach(a=>{
   `;
   assessGrid.appendChild(card);
 });
+
+/* =================================================================
+   RENDER: learning outcomes table
+================================================================= */
+const uloTable = document.getElementById('uloTable');
+const shortName = a => a.name.replace('Practical Demonstration ','PD').replace('Written exam','Exam');
+uloTable.innerHTML = `<div class="ulo-row head"><div>ULO</div><div>Outcome</div>${ASSESSMENTS.map(a=>`<div>${shortName(a).toUpperCase()} · ${a.weight}%</div>`).join('')}</div>` +
+  Object.keys(ULO_TEXT).map(u=>`<div class="ulo-row">
+    <div><button type="button" class="ulo-chip" data-ulo="${u}" title="Highlight the weeks that build ${u}">${u}</button></div>
+    <div class="txt">${ULO_TEXT[u]}</div>
+    <div class="covs">${ASSESSMENTS.map(a=>`<div class="cov">${a.ulos.includes(u)?`<span class="y" aria-label="Covered"></span>`:`<span class="n" aria-label="Not covered"></span>`}<span class="lbl">${shortName(a)}</span></div>`).join('')}</div>
+  </div>`).join('');
+document.getElementById('uloJump').addEventListener('click', ()=>document.getElementById('ulo-sec').scrollIntoView({behavior:'smooth'}));
 
 /* =================================================================
    RENDER: weekly timeline
