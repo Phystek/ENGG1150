@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resistive Circuits Toolkit — ENGG1150</title>
+<style>
+:root{
+  --ink:#1a1512; --paper:#faf7f2; --panel:#ffffff; --maroon:#7a1730; --mq-red:#a6192e;
+  --muted:#6b6156; --grid:#e4ddd2; --focus:#1c5f7a; --amber:#c98a2c;
+  --serif:"Iowan Old Style","Georgia",serif;
+  --sans:"Helvetica Neue",Arial,sans-serif;
+  --math:"STIX Two Text","Cambria","Times New Roman","Noto Serif",serif;
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+body{margin:0;background:#ffffff;color:var(--ink);font-family:var(--sans);overflow-x:hidden;}
+.wrap{max-width:820px;margin:0 auto;padding:22px 20px 34px;}
+header.top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:6px 16px;
+  border-bottom:1px solid var(--grid);padding-bottom:12px;margin-bottom:12px;}
+.eyebrow{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--maroon);font-weight:700;margin:0 0 4px;}
+h1{font-family:var(--serif);font-size:26px;letter-spacing:-0.01em;line-height:1.15;margin:0;font-weight:700;}
+.tag{font-size:12px;color:var(--muted);white-space:nowrap;}
+button{font-family:inherit;}
+.btn{padding:8px 14px;font-size:12px;font-weight:700;border-radius:4px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;line-height:1.2;}
+@media (hover:hover){.btn:hover{background:var(--ink);color:var(--paper);}}
+.btn:active{background:var(--ink);color:var(--paper);}
+.btn.primary{background:var(--ink);color:var(--paper);}
+@media (hover:hover){.btn.primary:hover{background:var(--maroon);border-color:var(--maroon);}}
+.btn:disabled{opacity:0.35;cursor:default;pointer-events:none;}
+.btn.mini{padding:6px 10px;font-size:11.5px;}
+.btn.quiet{border-color:var(--grid);background:var(--paper);}
+button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+
+/* ---- progress strip and contents ---- */
+.strip{display:flex;align-items:center;gap:12px;margin:0 0 14px;}
+.bar{flex:1;height:5px;background:var(--grid);border-radius:3px;overflow:hidden;}
+.bar>span{display:block;height:100%;width:0;background:var(--mq-red);transition:width .5s ease;}
+.pgno{font-size:12px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums;}
+.toc-wrap{position:relative;}
+.toc{position:absolute;right:0;top:calc(100% + 6px);z-index:40;width:min(300px,calc(100vw - 32px));background:#fff;border:1px solid var(--mq-red);
+  border-radius:4px;box-shadow:0 10px 26px rgba(26,21,18,0.18);padding:6px;}
+.toc[hidden]{display:none;}
+.toc button{display:flex;gap:10px;width:100%;text-align:left;border:none;background:none;padding:8px 10px;font-size:13px;border-radius:3px;cursor:pointer;color:var(--ink);}
+.toc button .n{color:var(--muted);font-variant-numeric:tabular-nums;width:1.4em;flex:none;}
+.toc button .seen{margin-left:auto;color:#2f7d4f;font-weight:700;}
+.toc button[aria-current="page"]{background:#f6e7ea;font-weight:700;}
+@media (hover:hover){.toc button:hover{background:var(--paper);}}
+
+/* ---- the booklet ---- */
+.stage{position:relative;overflow:hidden;padding:2px 10px 12px 2px;margin:0 -10px 0 -2px;}
+.book{position:relative;perspective:2400px;}
+.page{position:relative;background:#fff;border:1px solid var(--mq-red);border-radius:2px 7px 7px 2px;padding:24px 30px 18px 40px;
+  box-shadow:3px 3px 0 #fff,4px 4px 0 #e8e1d6,6px 6px 0 #fff,7px 7px 0 #e8e1d6;min-height:300px;}
+.page::before{content:"";position:absolute;left:0;top:0;bottom:0;width:26px;pointer-events:none;
+  background:linear-gradient(90deg,rgba(26,21,18,0.13),rgba(26,21,18,0.03) 60%,rgba(26,21,18,0));}
+.run{display:flex;justify-content:space-between;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin:0 0 14px;}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:10px;border-top:1px solid var(--grid);font-size:11px;color:var(--muted);}
+.foot .num{font-family:var(--serif);font-size:14px;color:var(--ink);}
+.leaf{position:absolute;left:0;top:0;width:100%;transform-origin:left center;transform-style:preserve-3d;z-index:5;pointer-events:none;}
+.leaf>.page{backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.leaf>.back{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  background:linear-gradient(90deg,#efe9df,#fbf8f3 70%);border:1px solid var(--mq-red);border-radius:7px 2px 2px 7px;}
+.leaf .gloss{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(26,21,18,0),rgba(26,21,18,0.22));opacity:0;}
+.leaf.fwd{animation:turnFwd .72s cubic-bezier(.45,.05,.3,1) forwards;}
+.leaf.fwd .gloss{animation:gloss .72s ease-in-out forwards;}
+.leaf.bwd{animation:turnBwd .72s cubic-bezier(.45,.05,.3,1) forwards;}
+.leaf.bwd .gloss{animation:gloss .72s ease-in-out reverse forwards;}
+@keyframes turnFwd{from{transform:rotateY(0deg);} to{transform:rotateY(-180deg);}}
+@keyframes turnBwd{from{transform:rotateY(-180deg);} to{transform:rotateY(0deg);}}
+@keyframes gloss{0%{opacity:0;} 60%{opacity:1;} 100%{opacity:1;}}
+.under-shade{position:absolute;inset:0;z-index:4;pointer-events:none;background:linear-gradient(90deg,rgba(26,21,18,0.18),rgba(26,21,18,0));animation:shade .72s ease-in-out forwards;}
+@keyframes shade{0%{opacity:0;} 45%{opacity:1;} 100%{opacity:0;}}
+.page.fadein{animation:fadein .25s ease-out;}
+@keyframes fadein{from{opacity:0;} to{opacity:1;}}
+
+/* ---- navigation ---- */
+.nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;}
+.dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
+.dots button{width:9px;height:9px;border-radius:50%;border:1px solid var(--mq-red);background:#fff;padding:0;cursor:pointer;}
+.dots button.seen{background:#e9c3ca;}
+.dots button[aria-current="page"]{background:var(--mq-red);transform:scale(1.25);}
+.nav .btn{min-width:96px;}
+.hint{font-size:11px;color:var(--muted);text-align:center;margin:8px 0 0;}
+footer{text-align:center;color:var(--muted);font-size:11px;margin-top:20px;}
+
+/* ---- page content ---- */
+.pg h2{font-family:var(--serif);font-size:24px;letter-spacing:-0.01em;line-height:1.2;margin:0 0 8px;}
+.pg .sec{font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--maroon);font-weight:700;margin:0 0 4px;}
+.pg p{font-size:14.5px;line-height:1.55;margin:0 0 10px;}
+.pg .lead{font-family:var(--serif);font-size:16.5px;line-height:1.5;}
+.pg ul.pts{margin:0 0 12px;padding-left:20px;font-size:14.5px;line-height:1.55;}
+.pg ul.pts li{margin:0 0 4px;}
+.pg ul.pts li::marker{color:var(--mq-red);}
+.key{border-left:4px solid var(--mq-red);background:#fbf3f4;padding:9px 13px;margin:12px 0;font-size:14px;line-height:1.5;border-radius:0 4px 4px 0;}
+.key strong:first-child{color:var(--maroon);}
+.warn{background:#fbe9c6;border:1px solid #e0be6f;color:#5c4a12;padding:9px 13px;margin:12px 0;font-size:13.5px;line-height:1.5;border-radius:4px;}
+.warn strong{color:#3d3009;}
+.fm{font-family:var(--math);font-size:27px;text-align:center;margin:10px 0 12px;color:var(--ink);}
+.fm.sm{font-size:21px;}
+.var{font-style:italic;white-space:nowrap;}
+.pg p .var,.pg li .var,.key .var,.qc .var,.steptext .var{font-family:var(--math);font-size:1.12em;}
+.var sub{font-size:0.7em;vertical-align:-0.28em;line-height:0;margin-left:0.03em;}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 0.12em;}
+.frac>span:first-child{border-bottom:0.06em solid currentColor;padding:0 0.3em 0.1em;}
+.frac>span:last-child{padding:0.1em 0.3em 0;}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:8px 0 12px;}
+.card{border:1px solid var(--grid);border-radius:4px;padding:10px 12px;background:var(--paper);}
+.card .big{font-family:var(--math);font-size:26px;font-style:italic;color:var(--mq-red);line-height:1;}
+.card h3{font-family:var(--serif);font-size:15.5px;margin:4px 0 4px;}
+.card p{font-size:13px;line-height:1.45;margin:0;}
+.card .u{font-size:11px;color:var(--muted);margin-top:4px;}
+figure{margin:6px 0 10px;}
+svg.fig{display:block;width:100%;height:auto;max-width:560px;margin:0 auto;}
+svg.fig text{font-family:var(--math);font-style:italic;font-size:21px;fill:var(--ink);text-anchor:middle;dominant-baseline:central;user-select:none;-webkit-user-select:none;}
+svg.fig text.up{font-style:normal;}
+svg.fig text.val{font-style:normal;font-size:15px;fill:var(--muted);}
+svg.fig text.note{font-family:var(--sans);font-style:normal;font-size:13.5px;fill:var(--muted);}
+svg.fig text.hot{fill:var(--mq-red);font-weight:700;}
+svg.fig text.cur{fill:var(--maroon);}
+svg.fig text.foc{fill:var(--focus);}
+svg.fig .w{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s,stroke-width .2s;}
+svg.fig .f{fill:var(--ink);}
+svg.fig .src{fill:#fff;}
+svg.fig .curw{stroke:var(--maroon);stroke-width:2;fill:none;}
+svg.fig .cura{fill:var(--maroon);}
+svg.fig .fd{fill:#c98a2c;stroke:#fff;stroke-width:0.8;}
+svg.fig .box{fill:none;stroke:var(--focus);stroke-width:2;stroke-dasharray:6 5;}
+svg.fig .axis{stroke:var(--ink);stroke-width:1.6;fill:none;}
+svg.fig .tick{stroke:var(--ink);stroke-width:1.6;}
+svg.fig .lvl{stroke:var(--grid);stroke-width:1.4;stroke-dasharray:4 4;}
+svg.fig .arr{stroke:var(--mq-red);stroke-width:2.4;fill:none;}
+svg.fig .arrh{fill:var(--mq-red);}
+svg.fig [data-p]{transition:opacity .25s;}
+svg.fig.has-hl [data-p]:not(.on){opacity:0.22;}
+svg.fig [data-p].on .w{stroke:var(--focus);stroke-width:3.6;}
+svg.fig .new .w{stroke:var(--focus);stroke-width:3.2;}
+svg.fig .flow{transition:opacity .25s;}
+svg.fig.has-hl .flow{opacity:0.25;}
+.cap{font-size:12px;color:var(--muted);text-align:center;margin:2px 0 0;line-height:1.4;}
+
+/* ---- sliders and readouts ---- */
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:4px 18px;margin:6px 0 4px;}
+.sl label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:2px;}
+.sl .v{font-weight:700;color:var(--maroon);font-variant-numeric:tabular-nums;}
+.sl input{width:100%;margin:0;accent-color:var(--maroon);}
+@media (pointer:coarse){.sl input{height:30px;}}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:10px 0 6px;}
+.stat{background:var(--paper);border:1px solid var(--grid);border-radius:4px;padding:7px 6px;text-align:center;}
+.stat .l{font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+.stat .n{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.share{display:flex;height:30px;border-radius:4px;overflow:hidden;border:1px solid var(--grid);margin:8px 0 2px;}
+.share>div{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;transition:flex-grow .3s ease;
+  white-space:nowrap;overflow:hidden;min-width:0;}
+.share-cap{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px;}
+
+/* ---- quick checks ---- */
+.qc{border:1px solid var(--mq-red);border-radius:4px;background:#fbf4f5;padding:10px 13px;margin:14px 0 4px;}
+.qc-h{margin:0 0 8px !important;font-size:14px !important;line-height:1.45 !important;}
+.qtag{display:inline-block;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;color:#fff;background:var(--mq-red);
+  border-radius:2px;padding:2px 6px;margin-right:8px;vertical-align:1px;}
+.qc-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.qc-row input{width:110px;font:inherit;font-size:15px;padding:7px 9px;border:1px solid var(--ink);border-radius:4px;background:#fff;color:var(--ink);font-variant-numeric:tabular-nums;}
+.qc-row .u{font-family:var(--math);font-size:17px;}
+.qc-fb{margin:8px 0 0 !important;font-size:13.5px !important;line-height:1.45 !important;}
+.qc-fb:empty{display:none;}
+.qc-fb.good{color:#2f7d4f;} .qc-fb.bad{color:#a3372c;}
+.qc.done{background:#eef7f1;border-color:#9fcdb0;}
+.opts{display:flex;gap:8px;flex-wrap:wrap;}
+.opts .btn[aria-pressed="true"].right{background:#2f7d4f;border-color:#2f7d4f;color:#fff;}
+.opts .btn[aria-pressed="true"].wrong{background:#a3372c;border-color:#a3372c;color:#fff;}
+
+/* ---- stepper (simplify page) ---- */
+.stepper{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:6px 0 4px;}
+.stepper .sc{font-size:12px;color:var(--muted);}
+.steptext{min-height:4.6em;font-size:14.5px;line-height:1.55;background:var(--paper);border:1px solid var(--grid);border-radius:4px;padding:9px 12px;margin:6px 0 0;}
+.steptext strong{color:var(--maroon);}
+.swap{animation:fadein .35s ease-out;}
+
+/* ---- method and slips ---- */
+ol.method{counter-reset:m;list-style:none;padding:0;margin:6px 0 12px;}
+ol.method li{counter-increment:m;position:relative;padding:0 0 9px 40px;font-size:14.5px;line-height:1.5;}
+ol.method li::before{content:counter(m);position:absolute;left:0;top:-1px;width:27px;height:27px;border-radius:50%;background:var(--mq-red);color:#fff;
+  font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;}
+details.slip{border:1px solid var(--grid);border-radius:4px;margin:0 0 6px;background:var(--paper);}
+details.slip summary{cursor:pointer;padding:8px 12px;font-size:14px;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:10px;}
+details.slip summary::-webkit-details-marker{display:none;}
+details.slip summary::after{content:"+";color:var(--mq-red);font-size:16px;line-height:1;}
+details.slip[open] summary::after{content:"−";}
+details.slip p{margin:0 !important;padding:0 12px 10px;font-size:13.5px !important;}
+
+/* ---- cover and summary ---- */
+.cover{text-align:center;padding:10px 0 4px;}
+.cover .sec{margin-top:6px;}
+.cover h2{font-size:36px;margin:2px 0 6px;}
+.cover .sub{font-family:var(--serif);font-size:17px;color:var(--muted);margin:0 0 6px;}
+.cover ul{list-style:none;padding:0;margin:10px auto 14px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:560px;}
+.cover ul li{font-size:12px;border:1px solid var(--grid);border-radius:12px;padding:3px 10px;background:var(--paper);}
+.sheet{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 0 12px;}
+.sheet>div{border:1px solid var(--grid);border-radius:4px;padding:9px 11px;}
+.sheet h3{font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--maroon);margin:0 0 4px;font-family:var(--sans);}
+.sheet .fm{font-size:19px;margin:2px 0;text-align:left;}
+.sheet p{font-size:12.5px !important;margin:0 !important;color:var(--muted);}
+.result{border:1px solid var(--mq-red);border-radius:4px;padding:10px 13px;background:#fbf4f5;font-size:14px;line-height:1.5;}
+.result .big{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--mq-red);}
+
+@media (max-width:640px){
+  .wrap{padding:14px 12px 26px;}
+  h1{font-size:21px;}
+  .page{padding:16px 16px 14px 26px;}
+  .page::before{width:16px;}
+  .pg h2{font-size:21px;}
+  .cover h2{font-size:29px;}
+  .cards{grid-template-columns:minmax(0,1fr);}
+  figure{margin:6px -12px 10px -18px;}
+  .sheet{grid-template-columns:minmax(0,1fr);}
+  .fm{font-size:23px;}
+  .nav .btn{min-width:0;padding:8px 12px;}
+  .dots{gap:4px;} .dots button{width:8px;height:8px;}
+}
+@media (prefers-reduced-motion:reduce){ .bar>span,.share>div{transition:none;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow">ENGG1150 &middot; Before you practise</p>
+      <h1>Resistive Circuits Toolkit</h1>
+    </div>
+    <div class="tag">ENGG1150</div>
+  </header>
+
+  <div class="strip">
+    <div class="bar" aria-hidden="true"><span id="bar"></span></div>
+    <span class="pgno" id="pgno" aria-live="polite"></span>
+    <div class="toc-wrap">
+      <button type="button" class="btn mini quiet" id="btnToc" aria-expanded="false" aria-controls="toc">Contents</button>
+      <div class="toc" id="toc" hidden></div>
+    </div>
+  </div>
+
+  <div class="stage"><div class="book" id="book" aria-live="polite"></div></div>
+
+  <div class="nav">
+    <button type="button" class="btn" id="btnPrev">&larr; Back</button>
+    <div class="dots" id="dots" role="group" aria-label="Pages"></div>
+    <button type="button" class="btn primary" id="btnNext">Next &rarr;</button>
+  </div>
+  <p class="hint" id="navHint">Swipe, use the arrow keys, or press Next to turn the page.</p>
+  <footer>ENGG1150 &mdash; learning booklet. <span id="saveNote"></span></footer>
+</div>
+<script>
+(function(){
+'use strict';
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,parent){
+  const e=document.createElementNS(NS,tag);
+  if (attrs) for (const k in attrs) if (attrs[k]!==undefined&&attrs[k]!==null) e.setAttribute(k,attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const $=id=>document.getElementById(id);
+// numbers as shown: at most two decimal places, trailing zeros dropped, a proper minus sign
+function f(x){ let t=(Math.round(x*100)/100).toFixed(2).replace(/\.?0+$/,''); if (t==='-0') t='0'; return t.replace('-','−'); }
+const par=(a,b)=>a*b/(a+b);
+const V=(s,sub)=>'<span class="var">'+s+(sub?'<sub>'+sub+'</sub>':'')+'</span>';
+const FR=(a,b)=>'<span class="frac"><span>'+a+'</span><span>'+b+'</span></span>';
+const S=(a,b)=>a+'<sub>'+b+'</sub>';
+
+// =====================================================================================
+// Drawing kit: schematic circuits in the same style as the practice activity. Parts carry
+// data-p names so a page can highlight them.
+// =====================================================================================
+function kit(svg){
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+  const K={};
+  K.g=(name,cls)=>el('g',name?{'data-p':name,'class':cls}:{'class':cls},svg);
+  K.wire=(g,pts)=>el('polyline',{'class':'w',points:pts.map(p=>p[0]+','+p[1]).join(' ')},g);
+  K.dot=(g,p)=>el('circle',{'class':'f',cx:p[0],cy:p[1],r:3.5},g);
+  K.lab=function(g,x,y,main,sub,cls,size,anchor){
+    const t=el('text',{x:x,y:y},g);
+    if (cls) t.setAttribute('class',cls);
+    let css=''; if (size) css+='font-size:'+size+'px;'; if (anchor) css+='text-anchor:'+anchor+';';
+    if (css) t.setAttribute('style',css);
+    el('tspan',{},t).textContent=main;
+    if (sub){ const s=el('tspan',{'font-size':'0.7em',dy:'0.32em'},t); s.textContent=sub; }
+    return t;
+  };
+  K.res=function(g,a,b){                                  // zigzag resistor on a straight line from a to b
+    const L=Math.hypot(b[0]-a[0],b[1]-a[1]), u=[(b[0]-a[0])/L,(b[1]-a[1])/L], v=[-u[1],u[0]];
+    const body=Math.min(64,L-12), s0=(L-body)/2, n=6, amp=10, at=(s,h)=>[a[0]+u[0]*s+v[0]*h,a[1]+u[1]*s+v[1]*h];
+    const pts=[a,at(s0,0)];
+    for (let i=0;i<n;i++) pts.push(at(s0+body*(i+0.5)/n,i%2===0?amp:-amp));
+    pts.push(at(s0+body,0),b); K.wire(g,pts.map(p=>[+p[0].toFixed(1),+p[1].toFixed(1)]));
+  };
+  K.src=function(g,x,y){                                  // DC source, + at the top
+    el('circle',{'class':'w src',cx:x,cy:y,r:24},g);
+    K.lab(g,x,y-12,'+',null,'up',17); K.lab(g,x,y+12,'−',null,'up',17);
+  };
+  K.arrow=function(g,x1,y1,x2,y2){                        // current arrow, maroon
+    const L=Math.hypot(x2-x1,y2-y1), ux=(x2-x1)/L, uy=(y2-y1)/L;
+    el('line',{'class':'curw',x1:x1,y1:y1,x2:x2-ux*7,y2:y2-uy*7},g);
+    el('polygon',{'class':'cura',points:[[x2,y2],[x2-ux*11-uy*4.6,y2-uy*11+ux*4.6],[x2-ux*11+uy*4.6,y2-uy*11-ux*4.6]].map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')},g);
+  };
+  K.flowLayer=()=>el('g',{'class':'flow'},svg);
+  return K;
+}
+
+// =====================================================================================
+// Current flow: dots move along each path at a speed proportional to its current (k px/s per mA).
+// Only the figures on the page in view move. Speeds can change smoothly (sliders): each path
+// keeps its own position, so a change of speed never makes the dots jump.
+// =====================================================================================
+const FLOWS=[];
+function flow(svg,layer,k){
+  const F={svg:svg,layer:layer,k:k,items:[]};
+  F.set=function(branches){
+    const keep=F.items.length===branches.length&&branches.every((b,i)=>JSON.stringify(b.pts)===F.items[i].key);
+    if (!keep){
+      while (layer.firstChild) layer.removeChild(layer.firstChild);
+      F.items=branches.map(b=>{
+        const seg=[]; let L=0;
+        for (let i=0;i<b.pts.length-1;i++){ const a=b.pts[i], c=b.pts[i+1], l=Math.hypot(c[0]-a[0],c[1]-a[1]); seg.push({a:a,c:c,l:l,s:L}); L+=l; }
+        const n=Math.max(1,Math.round(L/22)), dots=[];
+        for (let j=0;j<n;j++) dots.push(el('circle',{'class':'fd',r:3.4},layer));
+        return {key:JSON.stringify(b.pts),seg:seg,L:L,n:n,dots:dots,off:0,v:0};
+      });
+    }
+    F.items.forEach((it,i)=>{ it.v=F.k*branches[i].I; it.dots.forEach(d=>d.style.display=Math.abs(branches[i].I)<1e-9?'none':''); });
+    paint(F);
+  };
+  FLOWS.push(F);
+  return F;
+}
+function at(it,s){
+  s=((s%it.L)+it.L)%it.L;
+  for (const g of it.seg) if (s<=g.s+g.l||g===it.seg[it.seg.length-1]){ const t=Math.min(1,(s-g.s)/g.l); return [g.a[0]+(g.c[0]-g.a[0])*t,g.a[1]+(g.c[1]-g.a[1])*t]; }
+}
+function paint(F){ F.items.forEach(it=>{ const sp=it.L/it.n; it.dots.forEach((d,j)=>{ const p=at(it,it.off+j*sp); d.setAttribute('cx',p[0].toFixed(1)); d.setAttribute('cy',p[1].toFixed(1)); }); }); }
+let flowOn=true, lastT=null;
+function frame(t){
+  const dt=lastT===null?0:Math.min(0.1,(t-lastT)/1000); lastT=t;
+  for (let i=FLOWS.length-1;i>=0;i--){
+    const F=FLOWS[i];
+    if (!F.svg.isConnected){ FLOWS.splice(i,1); continue; }
+    if (!flowOn||F.svg.closest('.leaf')) continue;          // a page that is turning away stands still
+    F.items.forEach(it=>{ it.off+=it.v*dt; }); paint(F);
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+// =====================================================================================
+// Figures. Each takes an SVG and options, and returns what the page needs to update it.
+// =====================================================================================
+const FIG={
+  // one source, one resistor (pages 1 and 2)
+  loop(svg,o){
+    const K=kit(svg); svg.setAttribute('viewBox','0 0 520 250');
+    const XS=80, X2=440, YT=56, YB=214, YM=135;
+    const gw=K.g('loop'); K.wire(gw,[[XS,YM-24],[XS,YT],[210,YT]]); K.wire(gw,[[310,YT],[X2,YT],[X2,YB],[XS,YB],[XS,YM+24]]);
+    const fl=K.flowLayer();
+    const gs=K.g('src'); K.src(gs,XS,YM);
+    const gr=K.g('r'); K.res(gr,[210,YT],[310,YT]);
+    const gi=K.g('i'); K.arrow(gi,112,YT-18,142,YT-18);
+    const L={};
+    if (o.annot){
+      K.lab(gs,XS-44,YM,'V',null,null,24);
+      K.lab(gr,260,YT-30,'R',null,null,24);
+      K.lab(gi,127,YT-38,'I',null,'cur',24);
+      K.lab(svg,XS+38,YM,'V: the push from the source',null,'note',14,'start');
+      K.lab(svg,260,YT+30,'R: resists the flow',null,'note',14);
+      K.lab(svg,X2-14,YB-22,'I: the flow of charge round the loop',null,'note',14,'end');
+    } else {
+      K.lab(gs,XS-44,YM-12,'V',null,null,23); L.v=K.lab(gs,XS-44,YM+14,'',null,'up val');
+      K.lab(gr,260,YT-30,'R',null,null,23); L.r=K.lab(gr,260,YT+28,'',null,'up val');
+      K.lab(gi,127,YT-38,'I',null,'cur',23); L.i=K.lab(svg,X2-14,YB-22,'',null,'up hot',17,'end');
+    }
+    const F=flow(svg,fl,o.k||10);
+    return {F:F,L:L,path:[[XS,YM-24],[XS,YT],[X2,YT],[X2,YB],[XS,YB],[XS,YM+24]]};
+  },
+  // one source, three resistors in a row (page 3)
+  series(svg){
+    const K=kit(svg); svg.setAttribute('viewBox','0 0 540 240');
+    const XS=66, X2=500, YT=56, YB=204, YM=130;
+    const gw=K.g('loop');
+    K.wire(gw,[[XS,YM-24],[XS,YT],[124,YT]]); K.wire(gw,[[196,YT],[234,YT]]); K.wire(gw,[[306,YT],[344,YT]]); K.wire(gw,[[416,YT],[X2,YT],[X2,YB],[XS,YB],[XS,YM+24]]);
+    const fl=K.flowLayer();
+    const gs=K.g('src'); K.src(gs,XS,YM); K.lab(gs,XS-40,YM-12,'V',null,null,23); K.lab(gs,XS-40,YM+14,'24 V',null,'up val');
+    const L={};
+    [[124,196,'1'],[234,306,'2'],[344,416,'3']].forEach(([a,b,n],i)=>{
+      const g=K.g('r'+n); K.res(g,[a,YT],[b,YT]);
+      K.lab(g,(a+b)/2,YT-30,'R',n,null,22); L['r'+n]=K.lab(g,(a+b)/2,YT+28,'',null,'up val');
+      L['v'+n]=K.lab(g,(a+b)/2,YT+52,'',null,'up hot',15);
+    });
+    const gi=K.g('i'); K.arrow(gi,X2-14,YT+40,X2-14,YT+70); L.i=K.lab(gi,X2-24,YT+92,'',null,'up hot',16,'end');
+    const F=flow(svg,fl,12);
+    return {F:F,L:L,path:[[XS,YM-24],[XS,YT],[X2,YT],[X2,YB],[XS,YB],[XS,YM+24]]};
+  },
+  // one source, two resistors in parallel (page 4)
+  parallel(svg){
+    const K=kit(svg); svg.setAttribute('viewBox','0 0 520 250');
+    const XS=70, XA=250, XB=410, YT=46, YB=214, YM=130;
+    const gw=K.g('loop'); K.wire(gw,[[XS,YM-24],[XS,YT],[XB,YT],[XB,YM-40]]); K.wire(gw,[[XB,YM+40],[XB,YB],[XS,YB],[XS,YM+24]]);
+    K.wire(gw,[[XA,YT],[XA,YM-40]]); K.wire(gw,[[XA,YM+40],[XA,YB]]);
+    const fl=K.flowLayer();
+    const gs=K.g('src'); K.src(gs,XS,YM); K.lab(gs,XS-42,YM-12,'V',null,null,23); K.lab(gs,XS-42,YM+14,'12 V',null,'up val');
+    const L={};
+    const g1=K.g('r1'); K.res(g1,[XA,YM-40],[XA,YM+40]); K.lab(g1,XA-40,YM-12,'R','1',null,22); L.r1=K.lab(g1,XA-40,YM+14,'',null,'up val');
+    const g2=K.g('r2'); K.res(g2,[XB,YM-40],[XB,YM+40]); K.lab(g2,XB-40,YM-12,'R','2',null,22); L.r2=K.lab(g2,XB-40,YM+14,'',null,'up val');
+    L.i1=K.lab(svg,XA+16,YB-24,'',null,'up hot',15,'start'); L.i2=K.lab(svg,XB+16,YB-24,'',null,'up hot',15,'start');
+    const gi=K.g('i'); K.arrow(gi,104,YT-18,134,YT-18); L.i=K.lab(gi,144,YT-18,'',null,'up hot',15,'start');
+    const g0=K.g(null); K.dot(g0,[XA,YT]); K.dot(g0,[XA,YB]);
+    const F=flow(svg,fl,5);
+    return {F:F,L:L,X:{XS,XA,XB,YT,YB,YM}};
+  },
+  // ladder (page 5): Vs - R1 - node A; R2 from A down; R3 to R4, which goes down
+  ladder(svg){
+    const K=kit(svg); svg.setAttribute('viewBox','0 0 560 280');
+    const XS=60, XA=250, XB=470, YT=50, YB=250, YM=150;
+    const gw=K.g('loop'); K.wire(gw,[[XS,YM-24],[XS,YT],[110,YT]]); K.wire(gw,[[190,YT],[XA,YT]]); K.wire(gw,[[XS,YM+24],[XS,YB],[XA,YB]]);
+    const g2w=K.g('w2'); K.wire(g2w,[[XA,YT],[XA,110]]); K.wire(g2w,[[XA,190],[XA,YB]]);
+    const g34=K.g('w34'); K.wire(g34,[[XA,YT],[320,YT]]); K.wire(g34,[[400,YT],[XB,YT],[XB,110]]); K.wire(g34,[[XB,190],[XB,YB],[XA,YB]]);
+    const fl=K.flowLayer();
+    const gs=K.g('src'); K.src(gs,XS,YM); K.lab(gs,XS-38,YM,'V','s',null,23);
+    const g1=K.g('r1'); K.res(g1,[110,YT],[190,YT]); K.lab(g1,150,YT-30,'R','1',null,23);
+    const g2=K.g('r2'); K.res(g2,[XA,110],[XA,190]); K.lab(g2,XA+40,YM,'R','2',null,23);
+    const g3=K.g('r3'); K.res(g3,[320,YT],[400,YT]); K.lab(g3,360,YT-30,'R','3',null,23);
+    const g4=K.g('r4'); K.res(g4,[XB,110],[XB,190]); K.lab(g4,XB-40,YM,'R','4',null,23);
+    const g0=K.g(null); K.dot(g0,[XA,YT]); K.dot(g0,[XA,YB]); K.lab(g0,XA,YT-24,'A',null,'up',20);
+    const F=flow(svg,fl,10);
+    F.set([{I:3,pts:[[XS,YM-24],[XS,YT],[XA,YT]]},{I:1.5,pts:[[XA,YT],[XA,YB]]},{I:1.5,pts:[[XA,YT],[XB,YT],[XB,YB],[XA,YB]]},{I:3,pts:[[XA,YB],[XS,YB],[XS,YM+24]]}]);
+    return {F:F};
+  },
+  // series-parallel circuit drawn at each stage of simplifying it (cover, pages 6 and 9)
+  // stage: 0 = full circuit, 1 = R2 and R3 replaced by Rp, 2 = one resistor Req, 3 = Req with I,
+  //        4 = full circuit with I and Vo found, 9 = full circuit with every current and drop (page 9)
+  sp(svg,stage,o){
+    o=o||{};
+    const K=kit(svg); svg.setAttribute('viewBox','0 -12 540 302');
+    const XS=70, XA=300, X3=430, YT=50, YB=250, YM=150, vals=!o.bare;
+    const full=stage===0||stage>=4;
+    const gw=K.g('loop');
+    const fl=()=>K.flowLayer();
+    let flayer, branches;
+    if (full){
+      K.wire(gw,[[XS,YM-24],[XS,YT],[150,YT]]); K.wire(gw,[[230,YT],[X3,YT],[X3,110]]); K.wire(gw,[[XS,YM+24],[XS,YB],[X3,YB],[X3,190]]);
+      K.wire(gw,[[XA,YT],[XA,110]]); K.wire(gw,[[XA,190],[XA,YB]]);
+      flayer=fl();
+      const g1=K.g('r1'); K.res(g1,[150,YT],[230,YT]); K.lab(g1,190,YT-30,'R','1',null,23); if (vals) K.lab(g1,190,YT+28,'3 kΩ',null,'up val');
+      const g2=K.g('r2'); K.res(g2,[XA,110],[XA,190]); K.lab(g2,XA-42,YM-12,'R','2',null,23); if (vals) K.lab(g2,XA-42,YM+14,'6 kΩ',null,'up val');
+      const g3=K.g('r3'); K.res(g3,[X3,110],[X3,190]); K.lab(g3,X3-42,YM-12,'R','3',null,23); if (vals) K.lab(g3,X3-42,YM+14,'3 kΩ',null,'up val');
+      const g0=K.g(null); K.dot(g0,[XA,YT]); K.dot(g0,[XA,YB]);
+      branches=[{I:6,pts:[[XS,YM-24],[XS,YT],[XA,YT]]},{I:2,pts:[[XA,YT],[XA,YB]]},{I:4,pts:[[XA,YT],[X3,YT],[X3,YB],[XA,YB]]},{I:6,pts:[[XA,YB],[XS,YB],[XS,YM+24]]}];
+      if (stage===0||stage===4||stage===9){
+        const gv=K.g('vo');
+        K.lab(gv,X3+46,92,'+',null,'up hot',20); K.lab(gv,X3+46,208,'−',null,'up hot',20);
+        K.lab(gv,X3+46,YM-(stage>=4?12:0),'V','o','hot',24);
+        if (stage>=4) K.lab(gv,X3+46,YM+16,'12 V',null,'up hot',16);
+      }
+      if (stage===4){ const gb=K.g(null,'new'); el('rect',{'class':'box',x:XA-78,y:98,width:X3-XA+100,height:104,rx:6},gb); K.lab(gb,(XA+X3)/2-40,220,'R','p','foc',21); K.lab(gb,(XA+X3)/2-20,221,'= 2 kΩ',null,'up foc',15,'start'); }
+      if (stage===9){
+        K.lab(svg,190,YT+52,'18 V',null,'up hot',15);
+        K.lab(svg,XA+16,YB-15,'2 mA',null,'up hot',15,'start'); K.lab(svg,X3+16,YB-15,'4 mA',null,'up hot',15,'start');
+      }
+    } else if (stage===1){
+      K.wire(gw,[[XS,YM-24],[XS,YT],[150,YT]]); K.wire(gw,[[230,YT],[XA,YT],[XA,110]]); K.wire(gw,[[XA,190],[XA,YB],[XS,YB],[XS,YM+24]]);
+      flayer=fl();
+      const g1=K.g('r1'); K.res(g1,[150,YT],[230,YT]); K.lab(g1,190,YT-30,'R','1',null,23); K.lab(g1,190,YT+28,'3 kΩ',null,'up val');
+      const gp=K.g('rp','new'); K.res(gp,[XA,110],[XA,190]); K.lab(gp,XA-42,YM-12,'R','p','foc',23); K.lab(gp,XA-42,YM+14,'2 kΩ',null,'up foc',15);
+      branches=[{I:6,pts:[[XS,YM-24],[XS,YT],[XA,YT],[XA,YB],[XS,YB],[XS,YM+24]]}];
+    } else {
+      K.wire(gw,[[XS,YM-24],[XS,YT],[XA,YT],[XA,110]]); K.wire(gw,[[XA,190],[XA,YB],[XS,YB],[XS,YM+24]]);
+      flayer=fl();
+      const gq=K.g('req','new'); K.res(gq,[XA,110],[XA,190]); K.lab(gq,XA-46,YM-12,'R','eq','foc',23); K.lab(gq,XA-46,YM+14,'5 kΩ',null,'up foc',15);
+      branches=[{I:6,pts:[[XS,YM-24],[XS,YT],[XA,YT],[XA,YB],[XS,YB],[XS,YM+24]]}];
+    }
+    const gs=K.g('src'); K.src(gs,XS,YM); K.lab(gs,XS-42,YM-12,'V','s',null,23); if (vals) K.lab(gs,XS-42,YM+14,'30 V',null,'up val');
+    const gi=K.g('i'); K.arrow(gi,98,YT-18,128,YT-18); K.lab(gi,113,YT-38,'I',null,'cur',23);
+    if (stage===3||stage===4||stage===9) K.lab(gi,92,YT-18,'6 mA',null,'up hot',16,'end');
+    const F=flow(svg,flayer,10); F.set(branches);
+    return {F:F};
+  },
+  // voltage divider (page 7): R1 above R2, V2 across R2
+  divider(svg){
+    const K=kit(svg); svg.setAttribute('viewBox','0 0 520 320');
+    const XS=80, XR=300, YT=40, YB=290, YM=165;
+    const gw=K.g('loop'); K.wire(gw,[[XS,YM-24],[XS,YT],[XR,YT],[XR,70]]); K.wire(gw,[[XR,150],[XR,180]]); K.wire(gw,[[XR,260],[XR,YB],[XS,YB],[XS,YM+24]]);
+    const fl=K.flowLayer();
+    const gs=K.g('src'); K.src(gs,XS,YM); K.lab(gs,XS-44,YM-12,'V','in',null,23); K.lab(gs,XS-44,YM+14,'12 V',null,'up val');
+    const L={};
+    const g1=K.g('r1'); K.res(g1,[XR,70],[XR,150]); K.lab(g1,XR-42,98,'R','1',null,22); L.r1=K.lab(g1,XR-42,124,'',null,'up val');
+    const g2=K.g('r2'); K.res(g2,[XR,180],[XR,260]); K.lab(g2,XR-42,208,'R','2',null,22); L.r2=K.lab(g2,XR-42,234,'',null,'up val');
+    const gv=K.g('v2');
+    K.lab(gv,XR+38,186,'+',null,'up hot',20); K.lab(gv,XR+38,256,'−',null,'up hot',20);
+    K.lab(gv,XR+38,220,'V','2','hot',23); L.v2=K.lab(gv,XR+60,221,'',null,'up hot',15,'start');
+    const F=flow(svg,fl,10);
+    return {F:F,L:L,path:[[XS,YM-24],[XS,YT],[XR,YT],[XR,YB],[XS,YB],[XS,YM+24]]};
+  },
+  // two branches and a voltage scale (page 8)
+  nodes(svg){
+    const K=kit(svg); svg.setAttribute('viewBox','0 0 590 330');
+    const XS=70, X1=210, X2=340, YT=40, YB=300, YM=170;
+    const gw=K.g('loop'); K.wire(gw,[[XS,YM-24],[XS,YT],[X2,YT],[X2,70]]); K.wire(gw,[[X2,270],[X2,YB],[XS,YB],[XS,YM+24]]);
+    K.wire(gw,[[X1,YT],[X1,70]]); K.wire(gw,[[X1,140],[X1,200]]); K.wire(gw,[[X1,270],[X1,YB]]); K.wire(gw,[[X2,140],[X2,200]]);
+    const fl=K.flowLayer();
+    const gs=K.g('src'); K.src(gs,XS,YM); K.lab(gs,XS-42,YM-12,'V','s',null,23); K.lab(gs,XS-42,YM+14,'12 V',null,'up val');
+    [[X1,70,140,'1','4 kΩ',-1],[X1,200,270,'2','8 kΩ',-1],[X2,70,140,'3','3 kΩ',1],[X2,200,270,'4','1 kΩ',1]].forEach(([x,a,b,n,v,s])=>{
+      const g=K.g('r'+n); K.res(g,[x,a],[x,b]); K.lab(g,x+s*38,(a+b)/2-12,'R',n,null,21); K.lab(g,x+s*38,(a+b)/2+13,v,null,'up val',14);
+    });
+    const gt=K.g('nodes');
+    K.wire(gt,[[X1,YM],[X1+26,YM]]); el('circle',{'class':'w src',cx:X1+30,cy:YM,r:4.5},gt); K.lab(gt,X1+30,YM+22,'a',null,null,21);
+    K.wire(gt,[[X2,YM],[X2-26,YM]]); el('circle',{'class':'w src',cx:X2-30,cy:YM,r:4.5},gt); K.lab(gt,X2-30,YM+22,'b',null,null,21);
+    const g0=K.g(null); [[X1,YT],[X1,YB],[X1,YM],[X2,YM]].forEach(p=>K.dot(g0,p));
+    // reference symbol on the bottom wire
+    const gr=K.g(null); K.wire(gr,[[150,YB],[150,YB+10]]); el('line',{'class':'w',x1:138,y1:YB+10,x2:162,y2:YB+10},gr); el('line',{'class':'w',x1:143,y1:YB+15,x2:157,y2:YB+15},gr); el('line',{'class':'w',x1:148,y1:YB+20,x2:152,y2:YB+20},gr);
+    // voltage scale: height on the scale = node voltage
+    const AX=468, y=v=>YB-v*(YB-YT)/12;
+    const ga=K.g('scale');
+    el('line',{'class':'axis',x1:AX,y1:y(0),x2:AX,y2:y(12)},ga);
+    [[12,'12 V','up val',null],[8,'a: 8 V','up',null],[3,'b: 3 V','up',null],[0,'0 V (ref.)','up val',null]].forEach(([v,t,c])=>{
+      el('line',{'class':'tick',x1:AX-6,y1:y(v),x2:AX+6,y2:y(v)},ga); K.lab(ga,AX+14,y(v),t,null,c,15,'start');
+    });
+    const gArr=el('g',{},svg);
+    const F=flow(svg,fl,10);
+    F.set([{I:4,pts:[[XS,YM-24],[XS,YT],[X1,YT]]},{I:3,pts:[[X1,YT],[X2,YT]]},{I:1,pts:[[X1,YT],[X1,YB]]},{I:3,pts:[[X2,YT],[X2,YB]]},{I:3,pts:[[X2,YB],[X1,YB]]},{I:4,pts:[[X1,YB],[XS,YB],[XS,YM+24]]}]);
+    // the arrow for Vab (from b up to a) or Vba (from a down to b)
+    function show(which){
+      while (gArr.firstChild) gArr.removeChild(gArr.firstChild);
+      const x=AX-22, ya=y(8), yb=y(3), from=which==='ab'?yb:ya, to=which==='ab'?ya:yb, d=to<from?-1:1;
+      el('line',{'class':'arr',x1:x,y1:from,x2:x,y2:to-d*9},gArr);
+      el('polygon',{'class':'arrh',points:x+','+to+' '+(x-5)+','+(to-d*11)+' '+(x+5)+','+(to-d*11)},gArr);
+      const t=which==='ab'?'+5 V':'−5 V';
+      K.lab(gArr,x-8,(ya+yb)/2,t,null,'up hot',16,'end');
+    }
+    return {F:F,show:show};
+  }
+};
+
+// =====================================================================================
+// Quick checks. Numeric checks accept the unit typed after the number. Each check's first try is
+// what counts towards the booklet's score; after that the student can keep trying or show the answer.
+// =====================================================================================
+const CHECKS={
+  ohm:{ page:2, q:'A 20 V source drives a 4 kΩ resistor. What current flows?', ans:5, unit:'mA',
+    ok:'Yes. '+V('I')+' = '+V('V')+' ÷ '+V('R')+' = 20 V ÷ 4 kΩ = 5 mA.',
+    hint:'Use '+V('I')+' = '+V('V')+' ÷ '+V('R')+'. With V in volts and R in kΩ, the answer comes out in mA.',
+    slips:[[80,'That is '+V('V')+' × '+V('R')+'. Current is '+V('V')+' ÷ '+V('R')+'.'],[0.2,'That is '+V('R')+' ÷ '+V('V')+'. Current is '+V('V')+' ÷ '+V('R')+'.'],[0.005,'That is the current in amps. This box is in mA: 0.005 A = 5 mA.']] },
+  series:{ page:3, q:'A 3 kΩ and a 5 kΩ resistor are in series. What is the total resistance?', ans:8, unit:'kΩ',
+    ok:'Yes. In series, resistances add: 3 + 5 = 8 kΩ.', hint:'Resistors in series simply add.',
+    slips:[[1.875,'That is the parallel rule. In series, resistances simply add.'],[15,'Resistances in series add; they don’t multiply.']] },
+  par:{ page:4, q:'A 12 kΩ and a 4 kΩ resistor are in parallel. What is their combined resistance?', ans:3, unit:'kΩ',
+    ok:'Yes. (12 × 4) ÷ (12 + 4) = 48 ÷ 16 = 3 kΩ. It is less than the smaller resistor, as it must be.',
+    hint:'Use product over sum. Check: the answer has to be less than 4 kΩ.',
+    slips:[[16,'That is the sum. Resistors in parallel combine as product over sum, which gives less than either one.'],[48,'That is the product. Divide it by the sum, 12 + 4.'],[0.3333,'That is 1/12 + 1/4, which is 1 ÷ '+S('R','p')+'. Flip it to get '+S('R','p')+'.']] },
+  div:{ page:7, q:'12 V is applied across a 1 kΩ resistor (top) and a 3 kΩ resistor (bottom) in series. What is the voltage across the 3 kΩ?', ans:9, unit:'V',
+    ok:'Yes. 12 × 3 ÷ (1 + 3) = 9 V. The 3 kΩ has three quarters of the resistance, so it takes three quarters of the voltage.',
+    hint:'Use '+S('V','2')+' = '+S('V','in')+' × '+S('R','2')+' ÷ ('+S('R','1')+' + '+S('R','2')+').',
+    slips:[[3,'That is the voltage across the 1 kΩ. Put the resistor you want on top of the fraction: 3 ÷ (1 + 3).'],[4,'That is 12 × 1 ÷ 3. The fraction is '+S('R','2')+' ÷ ('+S('R','1')+' + '+S('R','2')+'), the share of the total resistance.'],[36,'Multiply 12 by the fraction 3 ÷ (1 + 3), not by 3.']] },
+  vab:{ page:8, q:'Node a is at 2 V and node b is at 7 V. What is '+S('V','ab')+'?', ans:-5, unit:'V',
+    ok:'Yes. '+S('V','ab')+' = '+S('V','a')+' − '+S('V','b')+' = 2 − 7 = −5 V. It is negative because b is the higher node.',
+    hint:'Subtract in the order of the subscripts: '+S('V','ab')+' = '+S('V','a')+' − '+S('V','b')+'.',
+    slips:[[5,'Right size, wrong sign. '+S('V','ab')+' = '+S('V','a')+' − '+S('V','b')+' = 2 − 7.'],[9,S('V','ab')+' is a difference, not a sum.']] },
+  cls1:{ page:5, kind:'choice', ans:'series', hl:['r3','r4'],
+    q:'Are '+S('R','3')+' and '+S('R','4')+' in series, in parallel, or neither?',
+    ok:'Series. Nothing else connects at the corner between '+S('R','3')+' and '+S('R','4')+', so the same current flows through both.',
+    no:'Look at the corner between '+S('R','3')+' and '+S('R','4')+'. Does anything else connect there?' },
+  cls2:{ page:5, kind:'choice', ans:'parallel', hl:['r2','r3','r4','w2','w34'],
+    q:'Now treat '+S('R','3')+' + '+S('R','4')+' as one path. Are '+S('R','2')+' and that path in series, in parallel, or neither?',
+    ok:'Parallel. '+S('R','2')+' and the '+S('R','3')+'–'+S('R','4')+' path both connect between node A and the bottom wire.',
+    no:'Look at where each one starts and ends. Both run from node A to the bottom wire.' },
+  cls3:{ page:5, kind:'choice', ans:'neither', hl:['r1','r2','w2'],
+    q:'Are '+S('R','1')+' and '+S('R','2')+' in series, in parallel, or neither?',
+    ok:'Neither. The current from '+S('R','1')+' splits at node A, so they don’t carry the same current. And they don’t share both ends. You can only combine them after simplifying the rest.',
+    no:'Not quite. Current from '+S('R','1')+' splits at node A, and the two don’t connect between the same two nodes.' }
+};
+const NCHK=Object.keys(CHECKS).length;
+function readNumber(raw){
+  raw=String(raw).trim().replace(/,/g,'.').replace(/[−–]/g,'-');
+  const m=/^(-?\d*\.?\d+)\s*[a-zA-ZΩµ]*$/.exec(raw);
+  return m?parseFloat(m[1]):NaN;
+}
+function qcHTML(id){
+  const c=CHECKS[id];
+  if (c.kind==='choice') return '<div class="qc" data-qc="'+id+'"><p class="qc-h"><span class="qtag">Your turn</span>'+c.q+'</p><div class="opts">'+
+    [['series','Series'],['parallel','Parallel'],['neither','Neither']].map(o=>'<button type="button" class="btn mini" data-opt="'+o[0]+'">'+o[1]+'</button>').join('')+
+    '</div><p class="qc-fb" aria-live="polite"></p></div>';
+  return '<div class="qc" data-qc="'+id+'"><p class="qc-h"><span class="qtag">Quick check</span>'+c.q+'</p><div class="qc-row">'+
+    '<input type="text" inputmode="decimal" autocomplete="off" aria-label="Your answer, in '+c.unit+'"><span class="u">'+c.unit+'</span>'+
+    '<button type="button" class="btn mini" data-go>Check</button><button type="button" class="btn mini quiet" data-show hidden>Show answer</button></div>'+
+    '<p class="qc-fb" aria-live="polite"></p></div>';
+}
+// =====================================================================================
+// iLearn (Moodle) reporting through SCORM 1.2. The booklet reports:
+//   lesson_location : the page the student is on, so they come back to it
+//   status          : "incomplete" until every page has been opened, then "completed"
+//   score           : the percentage of the 8 quick checks answered correctly at the first try
+//   interactions    : every quick-check answer (id e.g. "p4_par", the value or choice, right or wrong)
+//   suspend_data    : pages opened, and each quick check's state
+// Anywhere else (GitHub Pages, a file preview) there is no SCORM API and nothing is saved.
+// =====================================================================================
+const LMS=(function(){
+  function find(w){
+    for (let n=0; w&&n<12; n++){
+      try { if (w.API&&typeof w.API.LMSInitialize==='function') return w.API; } catch(e){ return null; }
+      let up=null; try { up=w.parent; } catch(e){ return null; }
+      if (!up||up===w) break; w=up;
+    }
+    return null;
+  }
+  let api=find(window);
+  if (!api){ try { if (window.opener) api=find(window.opener); } catch(e){ api=null; } }
+  let live=false, t0=Date.now(), nInt=0, finished=false;
+  const set=(k,v)=>{ if (live){ try { api.LMSSetValue(k,String(v)); } catch(e){} } };
+  const get=k=>{ if (!live) return ''; try { return String(api.LMSGetValue(k)||''); } catch(e){ return ''; } };
+  const commit=()=>{ if (live){ try { api.LMSCommit(''); } catch(e){} } };
+  function hms(ms){ const s=ms/1000, h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=s%60;
+    return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+sec.toFixed(2).padStart(5,'0'); }
+  function now(){ const d=new Date(); return [d.getHours(),d.getMinutes(),d.getSeconds()].map(x=>String(x).padStart(2,'0')).join(':'); }
+  return {
+    get live(){ return live; },
+    start(){
+      if (!api) return null;
+      try { live=String(api.LMSInitialize(''))==='true'; } catch(e){ live=false; }
+      if (!live) return null;
+      const st=get('cmi.core.lesson_status');
+      if (st===''||st==='not attempted') set('cmi.core.lesson_status','incomplete');
+      nInt=parseInt(get('cmi.interactions._count'),10)||0;
+      set('cmi.core.exit','suspend'); commit();
+      let d=null; try { d=JSON.parse(get('cmi.suspend_data')||'null'); } catch(e){}
+      return {data:d,loc:parseInt(get('cmi.core.lesson_location'),10),status:st};
+    },
+    save(state,page,complete,score){
+      if (!live) return;
+      set('cmi.core.lesson_location',page);
+      set('cmi.suspend_data',JSON.stringify(state));
+      set('cmi.core.score.min',0); set('cmi.core.score.max',100); set('cmi.core.score.raw',score);
+      if (complete) set('cmi.core.lesson_status','completed');
+      commit();
+    },
+    interaction(id,type,resp,pattern,correct){
+      if (!live) return;
+      const p='cmi.interactions.'+nInt+'.';
+      set(p+'id',id); set(p+'type',type); set(p+'time',now());
+      set(p+'student_response',resp); set(p+'correct_responses.0.pattern',pattern); set(p+'result',correct?'correct':'wrong');
+      nInt++;
+    },
+    finish(){
+      if (!live||finished) return;
+      finished=true; set('cmi.core.session_time',hms(Date.now()-t0)); commit();
+      try { api.LMSFinish(''); } catch(e){}
+    }
+  };
+})();
+
+// state: v = pages opened; c = quick checks {id: {f: first try right (1) or wrong (0), d: done, s: answer shown, a: last answer}}
+let STATE={v:[],c:{}};
+function score(){ return Math.round(100*Object.values(STATE.c).filter(c=>c.f===1).length/NCHK); }
+function firstRight(){ return Object.values(STATE.c).filter(c=>c.f===1).length; }
+
+// =====================================================================================
+// Pages. Each has a title (for the contents list), its HTML, and an init that draws its figures
+// and wires its controls. A page is rebuilt every time it is shown, so all state lives in STATE.
+// =====================================================================================
+const sl=(id,label,min,max,val,unit,step)=>'<div class="sl"><label for="'+id+'"><span>'+label+'</span><span class="v" id="'+id+'v"></span></label>'+
+  '<input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+val+'" data-unit="'+unit+'"></div>';
+const stat=(id,l)=>'<div class="stat"><div class="l">'+l+'</div><div class="n" id="'+id+'"></div></div>';
+const SHARE=['#7a1730','#1c5f7a','#c98a2c'];
+function bindSliders(pg,ids,update){
+  const read=()=>ids.map(id=>+pg.querySelector('#'+id).value);
+  ids.forEach(id=>{ const s=pg.querySelector('#'+id); s.addEventListener('input',()=>{ upd(); }); });
+  function upd(){ const v=read(); ids.forEach((id,i)=>{ const s=pg.querySelector('#'+id); pg.querySelector('#'+id+'v').textContent=f(v[i])+' '+s.dataset.unit; }); update(v); }
+  upd();
+}
+
+const PAGES=[
+// ------------------------------------------------------------------ cover
+{ title:'Cover', html:()=>
+  '<div class="cover"><p class="sec">ENGG1150 · Before you practise</p><h2>Resistive Circuits</h2>'+
+  '<p class="sub">A mini guide to simplifying circuits and finding voltages</p>'+
+  '<figure><svg class="fig" id="f0" role="img" aria-label="A circuit with a source, one resistor in series and two in parallel, with current flowing"></svg></figure>'+
+  '<ul><li>Voltage, current, resistance</li><li>Ohm’s law</li><li>Series</li><li>Parallel</li><li>Spotting which is which</li><li>Simplifying</li><li>Voltage dividers</li><li>Node voltages</li><li>Checking with Kirchhoff</li><li>A method</li></ul>'+
+  '<p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">10 short pages, about 15 minutes. Try the quick checks as you go.</p>'+
+  '<button type="button" class="btn primary" data-next>Open the booklet &rarr;</button></div>',
+  init(pg){ FIG.sp(pg.querySelector('#f0'),0,{bare:true}); } },
+
+// ------------------------------------------------------------------ 1. V, I, R
+{ title:'Voltage, current, resistance', html:()=>
+  '<p class="sec">1 · The basics</p><h2>Voltage, current and resistance</h2>'+
+  '<p class="lead">Every circuit in this booklet uses just three quantities.</p>'+
+  '<div class="cards">'+
+  '<div class="card"><div class="big">V</div><h3>Voltage</h3><p>The push that drives current. A source, like a battery, provides it. A voltage is always measured <em>between two points</em>.</p><div class="u">unit: volt, V</div></div>'+
+  '<div class="card"><div class="big">I</div><h3>Current</h3><p>The flow of charge round the circuit. Current only flows if there is a complete loop.</p><div class="u">unit: amp, A</div></div>'+
+  '<div class="card"><div class="big">R</div><h3>Resistance</h3><p>How hard it is for current to flow through a part. More resistance, less current.</p><div class="u">unit: ohm, Ω</div></div></div>'+
+  '<figure><svg class="fig" id="f1" role="img" aria-label="A source and one resistor in a loop, with current flowing round it"></svg>'+
+  '<p class="cap">The moving dots show the current: out of the + end of the source, round the loop, and back in at the − end.</p></figure>'+
+  '<div class="key"><strong>Handy units.</strong> Resistances are often in kilohms (kΩ) and currents in milliamps (mA). Work in V, mA and kΩ and the thousands cancel out: <strong>V ÷ kΩ = mA</strong> and <strong>mA × kΩ = V</strong>.</div>',
+  init(pg){ const r=FIG.loop(pg.querySelector('#f1'),{annot:true}); r.F.set([{I:3,pts:r.path}]); } },
+
+// ------------------------------------------------------------------ 2. Ohm's law
+{ title:'Ohm’s law', html:()=>
+  '<p class="sec">2 · The key equation</p><h2>Ohm’s law</h2>'+
+  '<p>The voltage across a resistor equals the current through it times its resistance.</p>'+
+  '<div class="fm">'+V('V')+' = '+V('I')+' '+V('R')+'</div>'+
+  '<p style="text-align:center">Rearranged: &nbsp;'+V('I')+' = '+FR(V('V'),V('R'))+' &nbsp;&nbsp; '+V('R')+' = '+FR(V('V'),V('I'))+'</p>'+
+  '<figure><svg class="fig" id="f2" role="img" aria-label="A source and a resistor; the current changes as you move the sliders"></svg></figure>'+
+  '<div class="ctl">'+sl('s2v','Source voltage',0,12,6,'V')+sl('s2r','Resistance',1,12,2,'kΩ')+'</div>'+
+  '<p class="cap">Try it: double the voltage and the current doubles. Double the resistance and the current halves.</p>'+
+  qcHTML('ohm'),
+  init(pg){
+    const r=FIG.loop(pg.querySelector('#f2'),{k:10});
+    bindSliders(pg,['s2v','s2r'],([v,R])=>{ const I=v/R; r.L.v.textContent=f(v)+' V'; r.L.r.textContent=f(R)+' kΩ';
+      r.L.i.textContent='I = '+f(v)+' ÷ '+f(R)+' = '+f(I)+' mA'; r.F.set([{I:I,pts:r.path}]); });
+  } },
+
+// ------------------------------------------------------------------ 3. series
+{ title:'Series', html:()=>
+  '<p class="sec">3 · One after another</p><h2>Resistors in series</h2>'+
+  '<p>Resistors are in <strong>series</strong> when they are joined end to end in a single path, with nothing else connected between them.</p>'+
+  '<ul class="pts"><li>The <strong>same current</strong> flows through each one.</li>'+
+  '<li>Their resistances <strong>add</strong>: &nbsp;'+V('R','total')+' = '+V('R','1')+' + '+V('R','2')+' + '+V('R','3')+'</li>'+
+  '<li>The source voltage is <strong>shared</strong> between them. Each takes '+V('V')+' = '+V('I')+' '+V('R')+', and the shares add up to the source voltage.</li></ul>'+
+  '<figure><svg class="fig" id="f3" role="img" aria-label="Three resistors in series with a 24 volt source"></svg></figure>'+
+  '<div class="ctl">'+sl('s3a',S('R','1'),1,10,2,'kΩ')+sl('s3b',S('R','2'),1,10,4,'kΩ')+sl('s3c',S('R','3'),1,10,6,'kΩ')+'</div>'+
+  '<div class="share" id="sh3" aria-hidden="true"></div><div class="share-cap"><span>0 V</span><span>How the 24 V is shared</span><span>24 V</span></div>'+
+  '<p class="cap">The dots move at the same speed through all three: the current is the same. The biggest resistor takes the biggest share of the voltage.</p>'+
+  qcHTML('series'),
+  init(pg){
+    const r=FIG.series(pg.querySelector('#f3')), sh=pg.querySelector('#sh3');
+    sh.innerHTML=[0,1,2].map(i=>'<div style="background:'+SHARE[i]+'"></div>').join('');
+    bindSliders(pg,['s3a','s3b','s3c'],R=>{ const Rt=R[0]+R[1]+R[2], I=24/Rt;
+      R.forEach((x,i)=>{ r.L['r'+(i+1)].textContent=f(x)+' kΩ'; r.L['v'+(i+1)].textContent=f(I*x)+' V';
+        const seg=sh.children[i]; seg.style.flexGrow=x; seg.textContent=f(I*x)+' V'; });
+      r.L.i.textContent='I = 24 ÷ '+f(Rt)+' = '+f(I)+' mA';
+      r.F.set([{I:I,pts:r.path}]); });
+  } },
+
+// ------------------------------------------------------------------ 4. parallel
+{ title:'Parallel', html:()=>
+  '<p class="sec">4 · Side by side</p><h2>Resistors in parallel</h2>'+
+  '<p>Resistors are in <strong>parallel</strong> when both ends are connected to the same two nodes. (A node is a junction: everything joined by plain wire.)</p>'+
+  '<ul class="pts"><li>Each one has the <strong>same voltage</strong> across it.</li>'+
+  '<li>The current <strong>splits</strong> between them, and the branch currents add up to the total.</li>'+
+  '<li>The <strong>smaller resistance takes the bigger current</strong>.</li></ul>'+
+  '<p>Combine two resistors in parallel with “product over sum”:</p>'+
+  '<div class="fm">'+V('R','p')+' = '+FR(V('R','1')+' '+V('R','2'),V('R','1')+' + '+V('R','2'))+'</div>'+
+  '<figure><svg class="fig" id="f4" role="img" aria-label="Two resistors in parallel with a 12 volt source; the current splits between them"></svg></figure>'+
+  '<div class="ctl">'+sl('s4a',S('R','1'),1,12,6,'kΩ')+sl('s4b',S('R','2'),1,12,3,'kΩ')+'</div>'+
+  '<div class="stats">'+stat('o4p',S('R','p'))+stat('o4i','Total current')+'</div>'+
+  '<div class="key"><strong>Sanity check.</strong> '+S('R','p')+' is always <em>less than the smaller</em> resistor. Two equal resistors in parallel give half of one: 6 kΩ in parallel with 6 kΩ is 3 kΩ.</div>'+
+  qcHTML('par'),
+  init(pg){
+    const r=FIG.parallel(pg.querySelector('#f4')), X=r.X;
+    bindSliders(pg,['s4a','s4b'],([a,b])=>{ const Rp=par(a,b), I1=12/a, I2=12/b;
+      r.L.r1.textContent=f(a)+' kΩ'; r.L.r2.textContent=f(b)+' kΩ'; r.L.i1.textContent=f(I1)+' mA'; r.L.i2.textContent=f(I2)+' mA'; r.L.i.textContent=f(I1+I2)+' mA';
+      pg.querySelector('#o4p').textContent=f(Rp)+' kΩ'; pg.querySelector('#o4i').textContent=f(I1)+' + '+f(I2)+' = '+f(I1+I2)+' mA';
+      r.F.set([{I:I1+I2,pts:[[X.XS,X.YM-24],[X.XS,X.YT],[X.XA,X.YT]]},{I:I1,pts:[[X.XA,X.YT],[X.XA,X.YB]]},{I:I2,pts:[[X.XA,X.YT],[X.XB,X.YT],[X.XB,X.YB],[X.XA,X.YB]]},{I:I1+I2,pts:[[X.XA,X.YB],[X.XS,X.YB],[X.XS,X.YM+24]]}]); });
+  } },
+
+// ------------------------------------------------------------------ 5. series, parallel or neither
+{ title:'Series, parallel or neither?', html:()=>
+  '<p class="sec">5 · Before you combine</p><h2>Series, parallel, or neither?</h2>'+
+  '<p>Check how parts are <em>connected</em>, not how the drawing happens to look. Two quick tests:</p>'+
+  '<ul class="pts"><li><strong>Series:</strong> joined end to end, with nothing else connected at the node between them. So the same current flows through both.</li>'+
+  '<li><strong>Parallel:</strong> both connect between the same two nodes. So they have the same voltage.</li>'+
+  '<li><strong>Neither:</strong> you can’t combine them yet. Simplify somewhere else first.</li></ul>'+
+  '<figure><svg class="fig" id="f5" role="img" aria-label="A ladder circuit: R1 along the top to node A, R2 from node A down, then R3 along the top to R4, which goes down"></svg></figure>'+
+  qcHTML('cls1')+qcHTML('cls2')+qcHTML('cls3')+
+  '<div class="key"><strong>In a ladder, start at the far end.</strong> The parts furthest from the source are the only ones you can combine first. Work back towards the source.</div>',
+  init(pg){
+    const svg=pg.querySelector('#f5'); FIG.ladder(svg);
+    pg._hl=ids=>{ svg.classList.toggle('has-hl',!!ids); svg.querySelectorAll('[data-p]').forEach(g=>g.classList.toggle('on',!!ids&&ids.indexOf(g.dataset.p)>=0)); };
+    pg.querySelectorAll('.qc').forEach(q=>{ q.addEventListener('mouseenter',()=>pg._hl(CHECKS[q.dataset.qc].hl)); q.addEventListener('focusin',()=>pg._hl(CHECKS[q.dataset.qc].hl));
+      q.addEventListener('mouseleave',()=>pg._hl(null)); });
+  } },
+
+// ------------------------------------------------------------------ 6. simplify, then work back out
+{ title:'Simplify, then work back out', html:()=>
+  '<p class="sec">6 · The big idea</p><h2>Simplify, then work back out</h2>'+
+  '<p>To find one voltage in a circuit, <strong>combine resistors until there is one loop</strong>, find the current, then <strong>work back out</strong> to the part you need. Step through an example:</p>'+
+  '<figure><svg class="fig" id="f6" role="img" aria-label="The example circuit at the current step"></svg></figure>'+
+  '<div class="stepper"><button type="button" class="btn mini" id="st6p">&larr; Previous step</button><span class="sc" id="st6n"></span><button type="button" class="btn mini primary" id="st6n2">Next step &rarr;</button></div>'+
+  '<p class="steptext" id="st6t" aria-live="polite"></p>'+
+  '<div class="warn"><strong>Common slip.</strong> Don’t multiply the total current by '+S('R','3')+' alone (6 mA × 3 kΩ = 18 V, wrong). The current splits between '+S('R','2')+' and '+S('R','3')+', so use the combined '+S('R','p')+', or the current in '+S('R','3')+' only.</div>',
+  init(pg){
+    const T=[
+      'Here is the circuit. We want '+S('V','o')+', the voltage across '+S('R','3')+'. It has too many resistors to solve in one go.',
+      '<strong>Combine.</strong> '+S('R','2')+' and '+S('R','3')+' are in parallel: '+S('R','p')+' = (6 × 3) ÷ (6 + 3) = <strong>2 kΩ</strong>.',
+      '<strong>Combine again.</strong> '+S('R','1')+' and '+S('R','p')+' are now in series: '+S('R','eq')+' = 3 + 2 = <strong>5 kΩ</strong>. There is just one loop.',
+      '<strong>Find the current.</strong> Ohm’s law for the whole circuit: I = 30 V ÷ 5 kΩ = <strong>6 mA</strong>.',
+      '<strong>Work back out.</strong> All 6 mA flows through '+S('R','p')+', and '+S('R','p')+' has '+S('V','o')+' across it: '+S('V','o')+' = 6 mA × 2 kΩ = <strong>12 V</strong>.'
+    ];
+    const svg=pg.querySelector('#f6'), stages=[0,1,2,3,4];
+    let i=pg._step||0;
+    function show(anim){
+      FIG.sp(svg,stages[i]); const t=pg.querySelector('#st6t'); t.innerHTML=T[i];
+      pg.querySelector('#st6n').textContent='Step '+i+' of 4';
+      pg.querySelector('#st6p').disabled=i===0; pg.querySelector('#st6n2').disabled=i===4;
+      if (anim){ [svg,t].forEach(e=>{ e.classList.remove('swap'); void e.getBoundingClientRect(); e.classList.add('swap'); }); }
+      STEP6=i;
+    }
+    i=STEP6; show(false);
+    pg.querySelector('#st6p').addEventListener('click',()=>{ if (i>0){ i--; show(true); } });
+    pg.querySelector('#st6n2').addEventListener('click',()=>{ if (i<4){ i++; show(true); } });
+  } },
+
+// ------------------------------------------------------------------ 7. voltage divider
+{ title:'Voltage dividers', html:()=>
+  '<p class="sec">7 · A shortcut</p><h2>The voltage divider</h2>'+
+  '<p>Two resistors in series share the voltage across them <strong>in proportion to their resistance</strong>. This is a voltage divider, and it skips the current altogether:</p>'+
+  '<div class="fm">'+V('V','2')+' = '+V('V','in')+' '+FR(V('R','2'),V('R','1')+' + '+V('R','2'))+'</div>'+
+  '<figure><svg class="fig" id="f7" role="img" aria-label="A voltage divider: R1 above R2, with V2 across R2"></svg></figure>'+
+  '<div class="ctl">'+sl('s7a',S('R','1'),1,10,4,'kΩ')+sl('s7b',S('R','2'),1,10,2,'kΩ')+'</div>'+
+  '<div class="share" id="sh7" aria-hidden="true"></div><div class="share-cap"><span>'+S('R','1')+'’s share</span><span>'+S('R','2')+'’s share</span></div>'+
+  '<div class="key"><strong>The input isn’t always the source.</strong> In a ladder, each rung divides the voltage at the node before it. So '+S('V','in')+' might be a node voltage you have just found, not the source voltage.</div>'+
+  qcHTML('div'),
+  init(pg){
+    const r=FIG.divider(pg.querySelector('#f7')), sh=pg.querySelector('#sh7');
+    sh.innerHTML='<div style="background:'+SHARE[1]+'"></div><div style="background:'+SHARE[0]+'"></div>';
+    bindSliders(pg,['s7a','s7b'],([a,b])=>{ const v2=12*b/(a+b), I=12/(a+b);
+      r.L.r1.textContent=f(a)+' kΩ'; r.L.r2.textContent=f(b)+' kΩ'; r.L.v2.textContent='= 12 × '+f(b)+' ÷ '+f(a+b)+' = '+f(v2)+' V';
+      sh.children[0].style.flexGrow=a; sh.children[0].textContent=f(12-v2)+' V'; sh.children[1].style.flexGrow=b; sh.children[1].textContent=f(v2)+' V';
+      r.F.set([{I:I,pts:r.path}]); });
+  } },
+
+// ------------------------------------------------------------------ 8. node voltages
+{ title:'Node voltages', html:()=>
+  '<p class="sec">8 · Measuring from a reference</p><h2>Node voltages</h2>'+
+  '<p>Pick one node as the <strong>reference</strong>, usually the bottom wire, and call it 0 V. A <strong>node voltage</strong> like '+S('V','a')+' is how far node a sits above the reference. Think of it as a height.</p>'+
+  '<p>The voltage <em>between</em> two nodes is a difference, taken in the order of the subscripts:</p>'+
+  '<div class="fm sm">'+V('V','ab')+' = '+V('V','a')+' − '+V('V','b')+' &nbsp;&nbsp;and&nbsp;&nbsp; '+V('V','ba')+' = −'+V('V','ab')+'</div>'+
+  '<figure><svg class="fig" id="f8" role="img" aria-label="Two branches, each a voltage divider, with nodes a and b; a scale on the right shows a at 8 volts and b at 3 volts"></svg></figure>'+
+  '<div class="opts" style="justify-content:center"><button type="button" class="btn mini" data-vab="ab" aria-pressed="true">Show '+S('V','ab')+'</button><button type="button" class="btn mini" data-vab="ba" aria-pressed="false">Show '+S('V','ba')+'</button></div>'+
+  '<p class="cap" id="c8"></p>'+
+  qcHTML('vab'),
+  init(pg){
+    const r=FIG.nodes(pg.querySelector('#f8'));
+    const T={ab:S('V','ab')+' = '+S('V','a')+' − '+S('V','b')+' = 8 − 3 = +5 V: a is 5 V above b.',ba:S('V','ba')+' = '+S('V','b')+' − '+S('V','a')+' = 3 − 8 = −5 V: same gap, opposite sign.'};
+    function pick(w){ r.show(w); pg.querySelector('#c8').innerHTML=T[w]; pg.querySelectorAll('[data-vab]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.vab===w?'true':'false')); }
+    pg.querySelectorAll('[data-vab]').forEach(b=>b.addEventListener('click',()=>pick(b.dataset.vab)));
+    pick('ab');
+  } },
+
+// ------------------------------------------------------------------ 9. Kirchhoff checks
+{ title:'Checking with Kirchhoff’s laws', html:()=>
+  '<p class="sec">9 · Check your answer</p><h2>Kirchhoff’s laws</h2>'+
+  '<p>Two simple laws let you check any answer.</p>'+
+  '<div class="cards" style="grid-template-columns:repeat(2,minmax(0,1fr))">'+
+  '<div class="card"><h3>Current law (KCL)</h3><p>At any node, the current in equals the current out. Here: 6 mA in, 2 mA + 4 mA out.</p></div>'+
+  '<div class="card"><h3>Voltage law (KVL)</h3><p>Round any closed loop, the voltage drops add up to the source voltage. Here: 18 V + 12 V = 30 V.</p></div></div>'+
+  '<figure><svg class="fig" id="f9" role="img" aria-label="The example circuit with its currents and voltages labelled"></svg>'+
+  '<p class="cap">The circuit from page 6, solved. Watch the dots: the 6 mA splits into 2 mA and 4 mA, and joins up again.</p></figure>'+
+  '<div class="key"><strong>Quick sanity checks.</strong> A parallel combination is smaller than its smallest resistor. With one source, no voltage is bigger than the source voltage. Branch currents add up to the current that feeds them.</div>',
+  init(pg){ FIG.sp(pg.querySelector('#f9'),9); } },
+
+// ------------------------------------------------------------------ 10. the method
+{ title:'A method, and common slips', html:()=>
+  '<p class="sec">10 · Putting it together</p><h2>A method that works</h2>'+
+  '<ol class="method">'+
+  '<li><strong>Mark what you need</strong> on the circuit: which voltage, between which nodes, and which end is +.</li>'+
+  '<li><strong>Simplify.</strong> Combine series resistors (add) and parallel ones (product over sum), starting furthest from the source, until one loop is left.</li>'+
+  '<li><strong>Find the source current</strong> with Ohm’s law: '+V('I')+' = '+V('V')+' ÷ '+V('R','eq')+'.</li>'+
+  '<li><strong>Work back out</strong> to the part you need: '+V('V')+' = '+V('I')+' '+V('R')+' across a combined part, then voltage dividers where the voltage is shared.</li>'+
+  '<li><strong>Check</strong> with KCL, KVL and the sanity checks.</li></ol>'+
+  '<p style="margin-bottom:6px"><strong>Common slips.</strong> Tap each one.</p>'+
+  '<details class="slip"><summary>Stopping too early</summary><p>In a ladder, the voltage at a node like A is usually the <em>input</em> to the next divider, not the answer.</p></details>'+
+  '<details class="slip"><summary>Using the total current in one branch</summary><p>The current splits in a parallel group. Use the combined resistance, or that branch’s own current.</p></details>'+
+  '<details class="slip"><summary>Adding parallel resistors</summary><p>Parallel resistors combine as product over sum, and the answer is smaller than either one.</p></details>'+
+  '<details class="slip"><summary>Forgetting to flip</summary><p>1/'+S('R','1')+' + 1/'+S('R','2')+' gives 1/'+S('R','p')+'. Invert it at the end.</p></details>'+
+  '<details class="slip"><summary>Wrong sign for a two-node voltage</summary><p>'+S('V','ab')+' = '+S('V','a')+' − '+S('V','b')+', in the order of the subscripts. A negative answer is fine: it means b is higher.</p></details>',
+  init(){} },
+
+// ------------------------------------------------------------------ summary
+{ title:'Your toolkit', html:()=>
+  '<p class="sec">Summary</p><h2>Your toolkit</h2>'+
+  '<div class="sheet">'+
+  '<div><h3>Ohm’s law</h3><div class="fm">'+V('V')+' = '+V('I')+' '+V('R')+'</div><p>V ÷ kΩ = mA, mA × kΩ = V</p></div>'+
+  '<div><h3>Series</h3><div class="fm">'+V('R','total')+' = '+V('R','1')+' + '+V('R','2')+'</div><p>Same current; voltages add</p></div>'+
+  '<div><h3>Parallel</h3><div class="fm">'+V('R','p')+' = '+FR(V('R','1')+' '+V('R','2'),V('R','1')+' + '+V('R','2'))+'</div><p>Same voltage; currents add; smaller than either</p></div>'+
+  '<div><h3>Voltage divider</h3><div class="fm">'+V('V','2')+' = '+V('V','in')+' '+FR(V('R','2'),V('R','1')+' + '+V('R','2'))+'</div><p>Share of voltage = share of resistance</p></div>'+
+  '<div><h3>Two-node voltage</h3><div class="fm">'+V('V','ab')+' = '+V('V','a')+' − '+V('V','b')+'</div><p>Order of subscripts sets the sign</p></div>'+
+  '<div><h3>Checks</h3><div class="fm" style="font-size:16px">KCL: in = out<br>KVL: drops = source</div><p>Plus the sanity checks</p></div></div>'+
+  '<div class="result" id="res"></div>'+
+  '<p style="margin-top:12px">You’re ready. Next, open the <strong>Circuit Analysis Practice</strong> activity and try the questions. Come back here any time.</p>',
+  init(pg){
+    const n=firstRight(), ans=Object.keys(STATE.c).length;
+    pg.querySelector('#res').innerHTML='<span class="big">'+n+' of '+NCHK+'</span> quick checks right at the first try.'+
+      (ans<NCHK?' '+(NCHK-ans)+' not tried yet: you can go back to '+(NCHK-ans===1?'it':'them')+' any time.':'')+
+      (LMS.live?'<br>This booklet is now marked complete in iLearn.':'');
+  } }
+];
+let STEP6=0;
+// =====================================================================================
+// The booklet: one page at a time, with a page-turn animation. Turning forward, the current page
+// lifts from its right edge and turns over the spine to the left, uncovering the next page. Turning
+// back, the previous page swings back over from the left. With the reduce-motion setting on, pages
+// simply cross-fade.
+// =====================================================================================
+const book=$('book'), N=PAGES.length, RM=window.matchMedia('(prefers-reduced-motion: reduce)');
+let CUR=0, busy=false;
+
+function makePage(i){
+  const pg=document.createElement('div'); pg.className='page'; pg.dataset.i=i;
+  const head=i===0?'':'<div class="run"><span>Resistive circuits toolkit</span><span>'+PAGES[i].title+'</span></div>';
+  pg.innerHTML=head+'<div class="pg">'+PAGES[i].html()+'</div>'+
+    (i===0?'':'<div class="foot"><span>ENGG1150</span><span class="num">'+i+'</span></div>');
+  return pg;
+}
+function initPage(pg){
+  const i=+pg.dataset.i;
+  PAGES[i].init(pg);
+  wireChecks(pg);
+  pg.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>go(CUR+1)));
+}
+function leafOf(pg){
+  const leaf=document.createElement('div'); leaf.className='leaf';
+  const back=document.createElement('div'); back.className='back';
+  const gloss=document.createElement('div'); gloss.className='gloss';
+  leaf.appendChild(pg); leaf.appendChild(back); leaf.appendChild(gloss);
+  return leaf;
+}
+
+function go(i,noAnim){
+  if (i<0||i>=N||i===CUR&&book.firstChild||busy) return;
+  closeToc();
+  const old=book.querySelector(':scope > .page'), fwd=i>CUR;
+  const pg=makePage(i);
+  CUR=i; visit(i); chrome();
+  if (!old||noAnim||RM.matches){
+    if (old) old.remove();
+    if (old&&!noAnim) pg.classList.add('fadein'); book.appendChild(pg); initPage(pg); after(); return;
+  }
+  busy=true;
+  const h0=old.offsetHeight;
+  if (fwd){
+    // the new page goes underneath; the old one becomes the turning leaf on top
+    const oldH=old.offsetHeight;
+    book.appendChild(pg); initPage(pg);
+    const leaf=leafOf(old); leaf.style.height=oldH+'px'; old.style.height=oldH+'px';
+    book.appendChild(leaf);
+    const sh=document.createElement('div'); sh.className='under-shade'; book.appendChild(sh);
+    book.style.minHeight=Math.max(oldH,pg.offsetHeight)+'px';
+    leaf.classList.add('fwd');
+    done(leaf,()=>{ leaf.remove(); sh.remove(); });
+  } else {
+    // the previous page swings back over the current one, which stays underneath until it is covered
+    const sh=document.createElement('div'); sh.className='under-shade';
+    const leaf=leafOf(pg); book.appendChild(leaf); initPage(pg);
+    const h=pg.offsetHeight; leaf.style.height=h+'px';
+    book.style.minHeight=Math.max(h0,h)+'px';
+    book.insertBefore(sh,leaf);
+    leaf.classList.add('bwd');
+    done(leaf,()=>{ old.remove(); sh.remove(); book.insertBefore(pg,leaf); leaf.remove(); });
+  }
+  function done(leaf,fin){
+    let ended=false;
+    const end=()=>{ if (ended) return; ended=true; fin(); book.style.minHeight=''; busy=false; after(); };
+    leaf.addEventListener('animationend',e=>{ if (e.target===leaf) end(); });
+    setTimeout(end,1100);                              // in case the animation event never arrives
+  }
+  function after(){
+    const r=book.getBoundingClientRect();
+    if (r.top<0) window.scrollTo({top:window.scrollY+r.top-10,behavior:RM.matches?'auto':'smooth'});
+    const h=book.querySelector(':scope > .page h2'); if (h&&document.activeElement&&document.activeElement.closest('.nav,.toc,.page')) { h.setAttribute('tabindex','-1'); h.focus({preventScroll:true}); }
+  }
+}
+
+// ---------- navigation chrome ----------
+function chrome(){
+  $('btnPrev').disabled=CUR===0; $('btnNext').disabled=CUR===N-1;
+  $('btnNext').innerHTML=CUR===0?'Open &rarr;':(CUR===N-1?'The end':'Next &rarr;');
+  $('pgno').textContent=CUR===0?'Cover':'Page '+CUR+' of '+(N-1);
+  $('bar').style.width=(100*CUR/(N-1))+'%';
+  const dots=$('dots'); dots.innerHTML='';
+  PAGES.forEach((p,i)=>{ const b=document.createElement('button'); b.type='button';
+    b.setAttribute('aria-label',(i===0?'Cover':'Page '+i)+': '+p.title); if (STATE.v.indexOf(i)>=0) b.classList.add('seen');
+    if (i===CUR) b.setAttribute('aria-current','page'); b.addEventListener('click',()=>go(i)); dots.appendChild(b); });
+  const toc=$('toc'); toc.innerHTML='';
+  PAGES.forEach((p,i)=>{ const b=document.createElement('button'); b.type='button';
+    b.innerHTML='<span class="n">'+(i===0?'':i)+'</span><span>'+p.title+'</span>'+(STATE.v.indexOf(i)>=0?'<span class="seen" aria-label="opened">✓</span>':'');
+    if (i===CUR) b.setAttribute('aria-current','page'); b.addEventListener('click',()=>go(i)); toc.appendChild(b); });
+}
+function closeToc(){ $('toc').hidden=true; $('btnToc').setAttribute('aria-expanded','false'); }
+$('btnToc').addEventListener('click',e=>{ const t=$('toc'); t.hidden=!t.hidden; $('btnToc').setAttribute('aria-expanded',t.hidden?'false':'true'); e.stopPropagation(); });
+document.addEventListener('click',e=>{ if (!$('toc').hidden&&!e.target.closest('.toc-wrap')) closeToc(); });
+$('btnPrev').addEventListener('click',()=>go(CUR-1));
+$('btnNext').addEventListener('click',()=>go(CUR+1));
+document.addEventListener('keydown',e=>{
+  if (e.target.closest&&e.target.closest('input,textarea,select,summary')) return;
+  if (e.key==='ArrowRight'){ go(CUR+1); } else if (e.key==='ArrowLeft'){ go(CUR-1); } else if (e.key==='Escape') closeToc();
+});
+// swipe: a mostly horizontal drag of 60 px or more, not starting on a control
+let tx=null, ty=null;
+book.addEventListener('touchstart',e=>{ if (e.target.closest('input,button,summary,.qc')){ tx=null; return; } tx=e.touches[0].clientX; ty=e.touches[0].clientY; },{passive:true});
+book.addEventListener('touchend',e=>{
+  if (tx===null) return;
+  const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty; tx=null;
+  if (Math.abs(dx)>60&&Math.abs(dy)<Math.abs(dx)*0.6) go(CUR+(dx<0?1:-1));
+},{passive:true});
+
+// ---------- progress and saving ----------
+function visit(i){ if (STATE.v.indexOf(i)<0) STATE.v.push(i); save(); }
+const complete=()=>STATE.v.length>=N;
+function save(){
+  LMS.save(STATE,CUR,complete(),score());
+  if (LMS.live) $('saveNote').textContent=complete()?'Complete. Your progress is saved in iLearn.':'Your progress is saved in iLearn.';
+}
+
+// ---------- quick checks ----------
+function wireChecks(pg){
+  pg.querySelectorAll('.qc').forEach(box=>{
+    const id=box.dataset.qc, c=CHECKS[id], fb=box.querySelector('.qc-fb');
+    const st=()=>STATE.c[id];
+    function paintDone(){
+      box.classList.add('done');
+      if (c.kind==='choice'){
+        box.querySelectorAll('[data-opt]').forEach(b=>{ const on=b.dataset.opt===c.ans; b.setAttribute('aria-pressed',on?'true':'false'); b.classList.toggle('right',on); b.disabled=!on; });
+      } else {
+        const inp=box.querySelector('input'); inp.value=st().s?f(c.ans):(st().a||f(c.ans)); inp.disabled=true;
+        box.querySelector('[data-go]').hidden=true; box.querySelector('[data-show]').hidden=true;
+      }
+      fb.className='qc-fb good'; fb.innerHTML=(st().s?'':'')+c.ok;
+    }
+    if (st()&&st().d){ paintDone(); return; }
+    if (c.kind==='choice'){
+      box.querySelectorAll('[data-opt]').forEach(b=>b.addEventListener('click',()=>{
+        const k=b.dataset.opt, ok=k===c.ans;
+        if (!st()) STATE.c[id]={f:ok?1:0,d:0};
+        LMS.interaction('p'+c.page+'_'+id,'choice',k,c.ans,ok);
+        if (ok){ st().d=1; paintDone(); }
+        else { box.querySelectorAll('[data-opt]').forEach(x=>{ x.setAttribute('aria-pressed',x===b?'true':'false'); x.classList.toggle('wrong',x===b); });
+          fb.className='qc-fb bad'; fb.innerHTML='<strong>Not quite.</strong> '+c.no; }
+        save();
+      }));
+      return;
+    }
+    const inp=box.querySelector('input'), show=box.querySelector('[data-show]');
+    if (st()) show.hidden=false;
+    function check(){
+      const v=readNumber(inp.value);
+      if (!isFinite(v)){ fb.className='qc-fb bad'; fb.textContent='Enter a number, in '+c.unit+'.'; return; }
+      const ok=Math.abs(v-c.ans)<=0.01*Math.abs(c.ans);
+      if (!st()) STATE.c[id]={f:ok?1:0,d:0};
+      LMS.interaction('p'+c.page+'_'+id,'numeric',+v.toPrecision(6),c.ans,ok);
+      if (ok){ st().d=1; st().a=inp.value; paintDone(); save(); return; }
+      const slip=(c.slips||[]).find(s=>Math.abs(v-s[0])<=0.01*Math.abs(s[0]));
+      fb.className='qc-fb bad'; fb.innerHTML='<strong>Not quite.</strong> '+(slip?slip[1]:c.hint);
+      show.hidden=false; save();
+    }
+    box.querySelector('[data-go]').addEventListener('click',check);
+    inp.addEventListener('keydown',e=>{ if (e.key==='Enter'){ e.preventDefault(); check(); } });
+    show.addEventListener('click',()=>{ if (!st()) STATE.c[id]={f:0,d:0}; st().d=1; st().s=1; paintDone(); save(); });
+  });
+}
+
+// ---------- start ----------
+const R0=LMS.start();
+if (R0&&R0.data&&Array.isArray(R0.data.v)){ STATE={v:R0.data.v.filter(i=>i>=0&&i<N),c:R0.data.c||{}}; }
+if (LMS.live){
+  $('saveNote').textContent='Your progress is saved in iLearn.';
+  window.addEventListener('pagehide',()=>LMS.finish());
+  window.addEventListener('beforeunload',()=>LMS.finish());
+  document.addEventListener('visibilitychange',()=>{ if (document.visibilityState==='hidden') save(); });
+}
+CUR=-1;
+go(R0&&R0.loc>=0&&R0.loc<N?R0.loc:0,true);
+window.__bk={go:i=>go(i),get CUR(){ return CUR; },get busy(){ return busy; },STATE:()=>STATE,CHECKS:CHECKS,FLOWS:FLOWS,N:N};   // for automated tests
+})();
+</script>
+</body>
+</html>
